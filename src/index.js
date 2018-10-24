@@ -2,11 +2,44 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { Router } from 'react-router-dom';
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+
+import { Provider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
+import history from './history';
+
+const options = {
+    timeout: 5000,
+    position: "bottom center"
+};
+
+
+const httpLink = new HttpLink({
+    uri: "http://localhost:8000/graphql",
+    headers: {
+        "Authorization": localStorage.getItem('token') ? localStorage.getItem('token') : null
+    }
+})
+
+const client = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache().restore(window.__APOLLO_STATE__)
+});
+
+
+ReactDOM.render(
+    <ApolloProvider client={client}>
+        <Router history={history}>
+            <Provider template={AlertTemplate} {...options}>
+                <App />
+            </Provider>
+        </Router>
+    </ApolloProvider>, document.getElementById('root'));
+
