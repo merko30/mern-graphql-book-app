@@ -1,10 +1,14 @@
 import React from "react";
-import { graphql } from "react-apollo";
+import { useQuery } from "react-apollo";
+import { loader } from "graphql.macro";
 
 import { UserBookList, Loading, Error } from "../components";
-import getUsersBook from "../graphql/queries/books";
 
-const Dashboard = ({ data, loading, error }) => {
+const query = loader("../graphql/me.graphql");
+
+const Dashboard = () => {
+  const { data, loading, error } = useQuery(query);
+
   if (loading) return <Loading />;
   if (error) return <Error error={error.message} />;
 
@@ -19,4 +23,4 @@ const Dashboard = ({ data, loading, error }) => {
   }
 };
 
-export default graphql(getUsersBook)(Dashboard);
+export default Dashboard;

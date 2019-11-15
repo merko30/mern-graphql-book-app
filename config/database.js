@@ -1,11 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-module.exports = connect = (mongoUrl) => mongoose
-    .connect(
-        mongoUrl,
-        { useNewUrlParser: true }
-    )
-    .then(() => {
-        console.log("Connected to mLab database");
-    })
-    .catch(error => console.log("Database connection error: ", error));
+module.exports = async () => {
+  try {
+    await mongoose.connect(process.env.DB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log("Connected to database");
+  } catch (error) {
+    console.log("Database connection error: ", error);
+  }
+};

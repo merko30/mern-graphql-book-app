@@ -18,28 +18,14 @@ const BookDetail = ({
   const [show, setShow] = useState(false);
   const [error, setError] = useState(null);
 
-  const menuRef = useRef();
-
   useEffect(() => {
-    document.addEventListener("click", handleBodyClick);
-
     GoogleSearch.searchById(id)
       .then(data => {
         setBook(data);
         setLoading(false);
       })
       .catch(error => setError(error.message));
-
-    return () => document.removeEventListener("click", handleBodyClick);
   }, []);
-
-  const handleBodyClick = e => {
-    let opener = Array.from(document.getElementsByTagName("i"))[1];
-    let m = ReactDOM.findDOMNode(this.menuRef.current);
-    if (m && !m.contains(e.target) && e.target !== opener) {
-      this.setState({ show: false });
-    }
-  };
 
   return (
     <div className="relative h-screen mx-4">
@@ -49,7 +35,6 @@ const BookDetail = ({
         <div className="mx-auto container flex lg:flex-row flex-col flex-wrap">
           {localStorage.getItem("token") && (
             <BookMenu
-              ref={menuRef}
               show={show}
               handleMenu={() => setShow(!show)}
               book={{

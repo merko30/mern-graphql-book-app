@@ -1,11 +1,17 @@
-import gql from 'graphql-tag';
-
-const login = gql`
-    mutation login($email: String, $password: String) {
-        login(email: $email, password: $password) {
-            token
-        }
+mutation login($email: String, $password: String) {
+  login(email: $email, password: $password) {
+    token
+    user {
+      username
+      email
+      books {
+        title
+        authors
+        status
+        bookID
+        _id
+        cover
+      }
     }
-`;
-
-export default login;
+  }
+}

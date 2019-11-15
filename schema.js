@@ -3,15 +3,14 @@ const apollo = require("apollo-server");
 const schema = apollo.gql`
     type Query {
         message: String,
-        allBooks: [Book],
         me(id: String): User
     },
     type Mutation {
         addBook(title: String, authors: [String],bookID: String, cover: String ,status: String): BookResponse,
-        register(username: String, email: String, password: String): Message,
-        login(email: String, password: String): Token,
+        register(username: String, email: String, password: String): Ok,
+        login(email: String, password: String): LoginResponse,
         changeStatus(id: String, status: String): BookResponse,
-        deleteBook(id: String): Message
+        deleteBook(id: String): Ok
     },
     type Book {
         _id: String,
@@ -31,11 +30,12 @@ const schema = apollo.gql`
         email: String,
         books: [Book]
     }
-    type Token {
-        token: String
+    type LoginResponse {
+        token: String,
+        user: User
     },
-    type Message {
-        message: String
+    type Ok {
+        ok: Boolean
     }
     type Exist {
         exists: Boolean,

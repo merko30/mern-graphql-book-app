@@ -1,103 +1,76 @@
-import React, { Component } from "react";
-import { Mutation } from "react-apollo";
-
-import register from "../graphql/mutations/register";
+import React, { useState } from "react";
+import { useMutation } from "react-apollo";
+import { loader } from "graphql.macro";
 
 import { validate } from "../helpers/validate";
+
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import Error from "../components/Error";
 
-class Register extends Component {
-  constructor(props) {
-    super(props);
+const register = loader("../graphql/register.graphql");
 
-    this.state = {
-      username: "",
-      email: "",
-      password: "",
-      errors: {}
-    };
-  }
+const Register = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  handleChange = e => {
-    const { name, value } = e.target;
+  const [errors, setErrors] = null;
 
-    this.setState({
-      [name]: value
-    });
-  };
+  const [registerMutation, { data, error, loading }] = useMutation(register);
 
-  redirectPage = () => {
-    this.props.history.push("/login");
-  };
+  return (
+    <div className="mt-5 p-24">
+      <form
+        className="mt-8 md:mx-auto"
+        onSubmit={e => {
+          e.preventDefault();
+          setErrors(validate({ username, email, password }));
+          if (
+            Object.keys(validate({ username, email, password })).length === 0
+          ) {
+            registerMutation({ variables: { username, email, password } });
+          }
+        }}
+      >
+        <h2 className="uppercase text-teal-darkest">Sign in</h2>
+        <hr className="hr" />
+        {error && <Error error={error.message} />}
+        <div>
+          <TextInput
+            label="Username"
+            name="username"
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+          {errors.username && <Error error={errors.username} />}
 
-  render() {
-    const { username, email, password, errors } = this.state;
-    return (
-      <Mutation mutation={register} onCompleted={this.redirectPage}>
-        {(register, { error }) => (
-          <div className="center my2">
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                let errors = validate({ username, email, password });
-                this.setState(
-                  {
-                    errors
-                  },
-                  () => {
-                    if (Object.keys(errors).length === 0) {
-                      register({
-                        variables: {
-                          username: username,
-                          email: email,
-                          password: password
-                        }
-                      });
-                    }
-                  }
-                );
-              }}
-              className="form"
-            >
-              <h2 className="form-title">Sign up</h2>
-              <hr className="hr" />
-              {error && <Error error={error.message} />}
-              <div className="container">
-                <TextInput
-                  label="Username"
-                  name="username"
-                  type="text"
-                  value={username}
-                  onChange={this.handleChange}
-                />
-                {errors.username && <Error error={error.username} />}
+          <TextInput
+            label="Email"
+            name="email"
+            type="text"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
 
-                <TextInput
-                  label="Email"
-                  name="email"
-                  type="text"
-                  value={email}
-                  onChange={this.handleChange}
-                />
-                {errors.email && <Error error={error.email} />}
-                <TextInput
-                  label="Password"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={this.handleChange}
-                />
-                {errors.password && <Error error={error.password} />}
-                <Button type="submit">Sign up</Button>
-              </div>
-            </form>
-          </div>
-        )}
-      </Mutation>
-    );
-  }
-}
+          {errors.email && <Error error={errors.email} />}
+
+          <TextInput
+            label="Password"
+            type="password"
+            name="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          {errors.password && <Error error={errors.password} />}
+
+          <Button type="submit">Sign up</Button>
+        </div>
+      </form>
+      )}
+    </div>
+  );
+};
 
 export default Register;

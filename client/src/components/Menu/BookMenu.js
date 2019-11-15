@@ -1,96 +1,91 @@
-import React, { Component } from 'react'
-import { graphql } from 'react-apollo';
-import { withAlert } from 'react-alert';
+import React, { useEffect } from "react";
+import { useQuery } from "react-apollo";
+import { loader } from "graphql.macro";
 
-import getUsersBooks from '../../graphql/queries/books';
-import addBook from '../../graphql/mutations/addBook';
-import updateBook from '../../graphql/mutations/updateBook'
-import deleteBook from '../../graphql/mutations/deleteBook'
+import Menu from "./";
+import MutationItem from "./components/MutationItem";
 
-import Menu from './';
-import MutationItem from './components/MutationItem';
+const meQuery = loader("../../graphql/me.graphql");
+const addBook = loader("../../graphql/addBook.graphql");
+const updateBook = loader("../../graphql/updateBook.graphql");
+const deleteBook = loader("../../graphql/deleteBook.graphql");
 
-class BookMenu extends Component {
+const statuses = ["Currently Reading", "Read", "Wishlist"];
 
+const BookMenu = ({ handleMenu, alert, show, book, forwardRef }) => {
+  const { data, loading, error, refetch } = useQuery(meQuery);
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps !== this.props) {
-            this.props.data.refetch();
-        }
+  useEffect(() => {
+    refetch();
+  }, [data]);
+
+  const showMessage = data => {
+    handleMenu();
+    // alert.show(data.message);
+  };
+
+  const determineStatusesToRender = currentStatus => {
+    switch (currentStatus) {
+      case "Wishlist":
+        return ["Currently Reading", "Read"];
+      case "Currently Reading":
+        return ["Read"];
+      default:
+        return [];
     }
+  };
 
-    showMessage = (data) => {
-        const { handleMenu, alert } = this.props;
-        handleMenu();
-        alert.show(data.message);
-    }
-
-    determineStatusesToRender(currentStatus) {
-        switch (currentStatus) {
-            case "Wishlist":
-                return ['Currently Reading', 'Read']
-            case "Currently Reading":
-                return ['Read']
-            default:
-                return []
-        }
-    }
-
-    render() {
-        const { handleMenu, show, book, data } = this.props;
-        let statuses = ['Currently Reading', 'Read', 'Wishlist'];
-        let books = data && data.me && data.me.books;
-        return (
-            <div>
-                {/* if book doesn't exist in users books it renders all options*/}
-                {books && !books.filter(b => b.bookID === book.bookID).length > 0 &&
-                    <Menu handleMenu={handleMenu} show={show}>
-
-                        {statuses.map((status, i) => {
-                            return <MutationItem
-                                key={i}
-                                mutation={addBook}
-                                afterMutation={this.showMessage}
-                                variables={{ ...book, status }}
-                                bookStatus={status}
-                            />
-                        })}
-                    </Menu>
-                }
-                {/* if book exists in users books it renders the rest options */}
-                {books && books.filter(b => b.bookID === book.bookID).length > 0 &&
-
-                    <Menu handleMenu={handleMenu} show={show}>
-                        {/* 
+  const books = data && data.me && data.me.books;
+  return (
+    <div>
+      {/* if book doesn't exist in users books it renders all options*/}
+      {books && !books.filter(b => b.bookID === book.bookID).length > 0 && (
+        <Menu handleMenu={handleMenu} show={show}>
+          {statuses.map((status, i) => {
+            return (
+              <MutationItem
+                key={i}
+                mutation={addBook}
+                afterMutation={showMessage}
+                variables={{ ...book, status }}
+                bookStatus={status}
+              />
+            );
+          })}
+        </Menu>
+      )}
+      {/* if book exists in users books it renders the rest options */}
+      {books && books.filter(b => b.bookID === book.bookID).length > 0 && (
+        <Menu handleMenu={handleMenu} show={show}>
+          {/* 
                         since status could be changed I pass book status found in books array,
                         otherwise it wouldn't show any status but delete since book prop has no status property
                     */}
-                        {this.determineStatusesToRender(books.find(b => b.bookID === book.bookID).status).map((status, i) => {
-                            let bookIDfromArray = books.find(b => b.bookID === book.bookID)._id
-                            return <MutationItem
-                                key={i}
-                                mutation={updateBook}
-                                afterMutation={this.showMessage}
-                                variables={{ id: bookIDfromArray, status }}
-                                bookStatus={status}
-                            />
-                        })}
+          {determineStatusesToRender(
+            books.find(b => b.bookID === book.bookID).status
+          ).map((status, i) => {
+            let bookIDfromArray = books.find(b => b.bookID === book.bookID)._id;
+            return (
+              <MutationItem
+                key={i}
+                mutation={updateBook}
+                afterMutation={showMessage}
+                variables={{ id: bookIDfromArray, status }}
+                bookStatus={status}
+              />
+            );
+          })}
 
-                        <MutationItem
-                            mutation={deleteBook}
-                            afterMutation={this.showMessage}
-                            variables={{ id: book._id }}
-                            bookStatus={"Delete"}
-                        />
-                    </Menu>
+          <MutationItem
+            mutation={deleteBook}
+            afterMutation={showMessage}
+            variables={{ id: book._id }}
+            bookStatus={"Delete"}
+          />
+        </Menu>
+      )}
+    </div>
+  );
+};
 
-                }
-
-
-            </div>
-        )
-    }
-}
-
-
-export default withAlert(graphql(getUsersBooks)(BookMenu));
+export default BookMenu;
