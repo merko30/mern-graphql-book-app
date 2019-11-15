@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Navbar from './components/Navbar';
+import Navbar from "./components/Navbar";
 
-import Routes from './routes/Routes';
-
-
+import Routes from "./routes/Routes";
 
 class App extends Component {
   render() {
     return (
-      <div className="container mx-auto">
+      <div className="container mx-auto h-full">
         <Navbar />
         <Routes />
       </div>

@@ -1,25 +1,28 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 
-import { Home, Login, Register, Search, BookDetails, Dashboard } from '../pages';
-import GuestRoute from './GuestRoute';
-import AuthRoute from './AuthRoute'
+import GuestRoute from "./GuestRoute";
+import ProtectedRoute from "./ProtectedRoute";
 
-class Routes extends React.Component {
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import Dashboard from "../pages/Dashboard";
+import Search from "../pages/Search";
+import BookDetail from "../pages/BookDetail";
 
-    render() {
-        return (
-            <Switch>
-                <GuestRoute exact path="/" component={Home} />
-                <GuestRoute path="/login" component={Login} />
-                <GuestRoute path="/register" component={Register} />
-                <AuthRoute path="/dashboard" component={Dashboard} />
-                <AuthRoute path="/search" component={Search} />
-                <Route path="/book/details/:id" component={BookDetails} />
-                <Redirect from='*' to='/' />
-            </Switch>
-        );
-    }
-}
+const Routes = () => {
+  return (
+    <Switch>
+      <GuestRoute exact path="/" component={Home} />
+      <GuestRoute path="/login" component={Login} />
+      <GuestRoute path="/register" component={Register} />
+      <ProtectedRoute path="/dashboard" component={Dashboard} />
+      <ProtectedRoute path="/search" component={Search} />
+      <Route path="/book/:id" component={BookDetail} />
+      <Redirect from="*" to="/" />
+    </Switch>
+  );
+};
 
 export default Routes;
