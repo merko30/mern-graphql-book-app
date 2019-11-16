@@ -1,14 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useApolloClient, useQuery } from "react-apollo";
 import { loader } from "graphql.macro";
 
 import NavItem from "./components/NavItem";
+import Logo from "../../common/Logo";
 
 const query = loader("../../graphql/me.graphql");
 
-const Navbar = () => {
-  const { data } = useQuery(query);
+const Navbar = ({ blacklist }) => {
+  const { pathname } = useLocation();
+  const { data, loading } = useQuery(query);
   const client = useApolloClient();
 
   const handleLogout = async () => {
@@ -18,16 +20,14 @@ const Navbar = () => {
 
   const loggedIn = data && data.me;
 
-  return (
-    <div className="mx-2 mt-2 w-full flex justify-between items-center flex-row">
-      <h1>
-        <Link to="/" className="inline my-10 no-underline text-orange">
-          BookApp
-        </Link>
-      </h1>
+  return !blacklist.includes(pathname) ? (
+    <div className="container mx-auto flex items-center justify-between my-2 px-4">
+      <Link to="/">
+        <Logo size="xl" />
+      </Link>
 
-      {data && (
-        <ul className="flex items-center pl-0 justify-start">
+      {!loading && (
+        <ul className="flex items-center justify-start">
           <NavItem show={!loggedIn} to="/register">
             Register
           </NavItem>
@@ -45,7 +45,7 @@ const Navbar = () => {
         </ul>
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default Navbar;

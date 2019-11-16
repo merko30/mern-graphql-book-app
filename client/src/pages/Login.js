@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useMutation } from "react-apollo";
 import { loader } from "graphql.macro";
+import { Link } from "react-router-dom";
 
-import { validate } from "../helpers/validate";
+import { validate } from "../utils/validate";
 
-import TextInput from "../components/TextInput";
-import Button from "../components/Button";
-import Error from "../components/Error";
+import TextInput from "../common/TextInput";
+import Button from "../common/Button";
+import Error from "../common/Error";
 
 const login = loader("../graphql/login.graphql");
 const meQuery = loader("../graphql/me.graphql");
@@ -36,9 +37,9 @@ const Login = ({ history }) => {
   });
 
   return (
-    <div className="mt-5 p-24">
+    <div className="h-screen flex items-center justify-center flex-col">
       <form
-        className="mt-8 md:mx-auto"
+        className="p-16 bg-primary rounded shadow-lg md:mx-auto"
         onSubmit={e => {
           e.preventDefault();
           setErrors(validate({ email, password }));
@@ -47,8 +48,6 @@ const Login = ({ history }) => {
           }
         }}
       >
-        <h2 className="uppercase text-teal-darkest">Sign in</h2>
-        <hr className="hr" />
         {error && <Error error={error.message} />}
         <div>
           <TextInput
@@ -70,7 +69,13 @@ const Login = ({ history }) => {
           />
           {errors.password && <Error error={errors.password} />}
 
-          <Button type="submit">Sign in</Button>
+          <Link to="/register" className="block text-secondary mb-2 text-sm">
+            You don't have an account ?
+          </Link>
+
+          <Button type="submit" color="orange">
+            Sign in
+          </Button>
         </div>
       </form>
     </div>

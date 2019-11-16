@@ -22,11 +22,13 @@
     "react-transition-group": "^4.3.0"
   },
   "scripts": {
-    "watch:style": "postcss src/styles/index.css -o src/index.css -w",
     "start": "react-scripts start",
-    "build": "npm run build:style && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:styles": "postcss src/tailwind.css -o src/styles.css",
+    "prebuild": "npm run build:styles",
+    "prestart": "npm run build:styles"
   },
   "eslintConfig": {
     "extends": "react-app"

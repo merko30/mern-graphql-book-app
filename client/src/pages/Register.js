@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useMutation } from "react-apollo";
 import { loader } from "graphql.macro";
+import { Link } from "react-router-dom";
 
-import { validate } from "../helpers/validate";
+import { validate } from "../utils/validate";
 
-import TextInput from "../components/TextInput";
-import Button from "../components/Button";
-import Error from "../components/Error";
+import TextInput from "../common/TextInput";
+import Button from "../common/Button";
+import Error from "../common/Error";
 
 const register = loader("../graphql/register.graphql");
 
@@ -15,14 +16,14 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [errors, setErrors] = null;
+  const [errors, setErrors] = useState({});
 
   const [registerMutation, { data, error, loading }] = useMutation(register);
 
   return (
-    <div className="mt-5 p-24">
+    <div className="h-screen flex items-center justify-center flex-col">
       <form
-        className="mt-8 md:mx-auto"
+        className="md:mx-auto p-16 bg-primary rounded shadow-lg"
         onSubmit={e => {
           e.preventDefault();
           setErrors(validate({ username, email, password }));
@@ -33,8 +34,6 @@ const Register = () => {
           }
         }}
       >
-        <h2 className="uppercase text-teal-darkest">Sign in</h2>
-        <hr className="hr" />
         {error && <Error error={error.message} />}
         <div>
           <TextInput
@@ -64,11 +63,15 @@ const Register = () => {
             onChange={e => setPassword(e.target.value)}
           />
           {errors.password && <Error error={errors.password} />}
+          <Link to="/login" className="block text-secondary mb-2 text-sm">
+            Already have an account ?
+          </Link>
 
-          <Button type="submit">Sign up</Button>
+          <Button type="submit" color="orange">
+            Sign up
+          </Button>
         </div>
       </form>
-      )}
     </div>
   );
 };

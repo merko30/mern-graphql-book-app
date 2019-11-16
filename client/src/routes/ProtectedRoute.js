@@ -1,10 +1,27 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+import { useQuery } from "react-apollo";
+import { loader } from "graphql.macro";
 
-const GuestRoute = ({ component: Component, ...rest }) => {
-    return <Route {...rest} render={(props) => {
-        return localStorage.getItem('token') ? <Component {...props} /> : <Redirect to="/login" />
-    }} />
-}
+const query = loader("../graphql/me.graphql");
 
-export default GuestRoute;
+const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const { data, loading } = useQuery(query);
+  if (data) {
+    return (
+      <Route
+        {...rest}
+        render={props => {
+          return data && data.me && !loading ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to="/login" />
+          );
+        }}
+      />
+    );
+  }
+  return null;
+};
+
+export default ProtectedRoute;

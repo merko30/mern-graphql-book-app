@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { useState, useEffect } from "react";
 
 import GoogleSearch from "../API/search";
 
-import { Loading, Error } from "../components";
+import Error from "../common/Error";
+import Loading from "../common/Loading";
 
-import shorten from "../helpers/shortenAuthorName";
-import BookMenu from "../components/Menu/BookMenu";
+import BookMenu from "../common/Menu/BookMenu";
+import Authors from "../books/Authors";
 
 const BookDetail = ({
   match: {
@@ -28,11 +28,11 @@ const BookDetail = ({
   }, []);
 
   return (
-    <div className="relative h-screen mx-4">
+    <div className="relative mt-10 flex flex-col items-center justify-center px-4 md:px-10 lg:px-24 container mx-auto">
       {error && <Error error={error.message} />}
       {loading && <Loading />}
       {book && (
-        <div className="mx-auto container flex lg:flex-row flex-col flex-wrap">
+        <div className="mx-auto container flex">
           {localStorage.getItem("token") && (
             <BookMenu
               show={show}
@@ -46,37 +46,23 @@ const BookDetail = ({
             />
           )}
 
-          <div>
+          <div className="w-2/12">
             {book.volumeInfo.imageLinks && (
               <img
                 src={book.volumeInfo.imageLinks.thumbnail}
                 alt={book.volumeInfo.title}
               />
             )}
-
-            {book.volumeInfo.averageRating && (
-              <p>
-                Rating: <i className="fa fa-star"></i>{" "}
-                {book.volumeInfo.averageRating}
-              </p>
-            )}
-
-            {book.volumeInfo.pageCount && (
-              <p>Page count: {book.volumeInfo.pageCount}</p>
-            )}
           </div>
 
-          <div className="lg:ml-4 lg:w-3/4">
-            <h2>{book.volumeInfo.title}</h2>
-            {book.volumeInfo.authors &&
-              book.volumeInfo.authors.map((a, i) => {
-                return (
-                  <h4 key={i} className="text-gray-dark">
-                    {shorten(a)}
-                  </h4>
-                );
-              })}
-            <span className="spec">Publisher: {book.volumeInfo.publisher}</span>
+          <div className="w-10/12 ml-4">
+            <h1 className="text-3xl text-secondary">{book.volumeInfo.title}</h1>
+            {book.volumeInfo.authors && (
+              <Authors authors={book.volumeInfo.authors} classes="mb-0" />
+            )}
+            <span className="text-orange-700 text-sm">
+              Publisher: {book.volumeInfo.publisher}
+            </span>
             <p
               className="text-grey-light"
               dangerouslySetInnerHTML={{ __html: book.volumeInfo.description }}

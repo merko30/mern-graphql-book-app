@@ -9,12 +9,13 @@ const Menu = ({ show, handleMenu, children }) => {
     document.addEventListener("click", handleBodyClick);
 
     return () => document.removeEventListener("click", handleBodyClick);
-  }, []);
+  }, [show]);
 
   const handleBodyClick = e => {
     let opener = Array.from(document.getElementsByTagName("i"))[1];
     let m = ReactDOM.findDOMNode(menuRef.current);
     if (m && !m.contains(e.target) && e.target !== opener) {
+      console.log("here");
       handleMenu();
     }
   };

@@ -2,7 +2,8 @@ import React from "react";
 import { useQuery } from "react-apollo";
 import { loader } from "graphql.macro";
 
-import { UserBookList, Loading, Error } from "../components";
+import Loading from "../common/Loading";
+import Error from "../common/Error";
 
 const query = loader("../graphql/me.graphql");
 
@@ -16,11 +17,12 @@ const Dashboard = () => {
     console.log(data);
     return (
       <div className="mt-10 container">
-        <p>books loaded</p>
+        <p className="text-secondary">books loaded</p>
         {/* <UserBookList books={books} /> */}
       </div>
     );
   }
+  return <p>hello</p>;
 };
 
 export default Dashboard;
