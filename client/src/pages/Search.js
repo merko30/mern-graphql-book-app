@@ -1,45 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
-import GoogleSearch from "../API/search";
+import apiContext from "../books/context/api";
 
 import Error from "../common/Error";
 import Loading from "../common/Loading";
 import BookListItem from "../books/BookListItem";
-
-// Hook
-function useDebounce(value, delay) {
-  // State and setters for debounced value
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(
-    () => {
-      // Update debounced value after delay
-      const handler = setTimeout(() => {
-        setDebouncedValue(value);
-      }, delay);
-
-      // Cancel the timeout if value changes (also on delay change or unmount)
-      // This is how we prevent debounced value from updating if value is changed ...
-      // .. within the delay period. Timeout gets cleared and restarted.
-      return () => clearTimeout(handler);
-    },
-    [value, delay] // Only re-call effect if value or delay changes
-  );
-
-  return debouncedValue;
-}
+import { useDebounce } from "../hooks/useDebounce";
 
 const Search = () => {
+  const api = useContext(apiContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [timeout, setTime] = useState(null);
 
   const searchBooks = async term => {
     setLoading(true);
     try {
-      let data = await GoogleSearch.search(term);
+      let data = await api.search(term);
       setResults(data.items);
     } catch (error) {
       setError(error);
@@ -48,7 +26,6 @@ const Search = () => {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  // Effect for API call
   useEffect(
     () => {
       if (debouncedSearchTerm) {
@@ -58,11 +35,12 @@ const Search = () => {
         setResults([]);
       }
     },
-    [debouncedSearchTerm] // Only call effect if debounced search term changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [debouncedSearchTerm]
   );
 
   return (
-    <ul className="container px-4 w-9/12 mx-auto my-4">
+    <ul className="container w-9/12 my-4">
       <input
         onChange={e => setSearchTerm(e.target.value)}
         value={searchTerm}

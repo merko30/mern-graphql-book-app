@@ -21,7 +21,7 @@ const Navbar = ({ blacklist }) => {
   const loggedIn = data && data.me;
 
   return !blacklist.includes(pathname) ? (
-    <div className="container mx-auto flex items-center justify-between my-2 px-4">
+    <div className="container flex items-center justify-between my-2">
       <Link to="/">
         <Logo size="xl" />
       </Link>

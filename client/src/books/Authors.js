@@ -11,11 +11,12 @@ const shorten = name => {
 };
 
 const Authors = ({ authors, classes }) => {
+  const textSize = authors.length > 2 ? "text-sm" : "";
   return (
     <div className={`block ${classes}`}>
       {authors.map((author, i) => {
         return (
-          <h3 key={author} className="inline text-orange-900">
+          <h3 key={author} className={`inline text-orange-900 ${textSize}`}>
             {authors.length - 1 === i
               ? shorten(author)
               : `${shorten(author)} | `}

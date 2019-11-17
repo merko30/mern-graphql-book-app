@@ -2,21 +2,22 @@ import React, { useEffect } from "react";
 import { useQuery } from "react-apollo";
 import { loader } from "graphql.macro";
 
-import Menu from "./";
-import MutationItem from "./components/MutationItem";
+import Menu from "../common/Menu";
+import MutationItem from "./MutationItem";
 
-const meQuery = loader("../../graphql/me.graphql");
-const addBook = loader("../../graphql/addBook.graphql");
-const updateBook = loader("../../graphql/updateBook.graphql");
-const deleteBook = loader("../../graphql/deleteBook.graphql");
+const meQuery = loader("../graphql/me.graphql");
+const addBook = loader("../graphql/addBook.graphql");
+const updateBook = loader("../graphql/updateBook.graphql");
+const deleteBook = loader("../graphql/deleteBook.graphql");
 
 const statuses = ["Currently Reading", "Read", "Wishlist"];
 
-const BookMenu = ({ handleMenu, alert, show, book, forwardRef }) => {
-  const { data, loading, error, refetch } = useQuery(meQuery);
+const BookMenu = ({ handleMenu, alert, show, book, classes }) => {
+  const { data, refetch } = useQuery(meQuery);
 
   useEffect(() => {
     refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const showMessage = data => {
@@ -37,10 +38,9 @@ const BookMenu = ({ handleMenu, alert, show, book, forwardRef }) => {
 
   const books = data && data.me && data.me.books;
   return (
-    <div>
-      {/* if book doesn't exist in users books it renders all options*/}
+    <div className={`absolute top-0 right-0 ${classes}`}>
       {books && !books.filter(b => b.bookID === book.bookID).length > 0 && (
-        <Menu handleMenu={handleMenu} show={show}>
+        <Menu>
           {statuses.map((status, i) => {
             return (
               <MutationItem
@@ -54,13 +54,8 @@ const BookMenu = ({ handleMenu, alert, show, book, forwardRef }) => {
           })}
         </Menu>
       )}
-      {/* if book exists in users books it renders the rest options */}
       {books && books.filter(b => b.bookID === book.bookID).length > 0 && (
-        <Menu handleMenu={handleMenu} show={show}>
-          {/* 
-                        since status could be changed I pass book status found in books array,
-                        otherwise it wouldn't show any status but delete since book prop has no status property
-                    */}
+        <Menu>
           {determineStatusesToRender(
             books.find(b => b.bookID === book.bookID).status
           ).map((status, i) => {

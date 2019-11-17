@@ -1,40 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useQuery } from "react-apollo";
+import { loader } from "graphql.macro";
 
-import GoogleSearch from "../API/search";
+import apiContext from "../books/context/api";
 
 import Error from "../common/Error";
 import Loading from "../common/Loading";
 
-import BookMenu from "../common/Menu/BookMenu";
+import BookMenu from "../books/BookMenu";
 import Authors from "../books/Authors";
+
+const query = loader("../graphql/me.graphql");
 
 const BookDetail = ({
   match: {
     params: { id }
   }
 }) => {
+  const api = useContext(apiContext);
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [error, setError] = useState(null);
 
+  const { data } = useQuery(query);
+
+  const getBook = async () => {
+    setLoading(true);
+    try {
+      const data = await api.getSingle(id);
+      setBook(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+    }
+  };
+
   useEffect(() => {
-    GoogleSearch.searchById(id)
-      .then(data => {
-        setBook(data);
-        setLoading(false);
-      })
-      .catch(error => setError(error.message));
+    getBook();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="relative mt-10 flex flex-col items-center justify-center px-4 md:px-10 lg:px-24 container mx-auto">
+    <div className="relative mt-10 flex flex-col md:flex-row items-center justify-center md:px-10 lg:px-24 container">
       {error && <Error error={error.message} />}
       {loading && <Loading />}
       {book && (
-        <div className="mx-auto container flex">
-          {localStorage.getItem("token") && (
+        <div className="mx-auto flex flex-col sm:flex-row items-start justify-center">
+          {data && data.me && book && (
             <BookMenu
+              classes="mr-10"
               show={show}
               handleMenu={() => setShow(!show)}
               book={{
@@ -46,25 +62,24 @@ const BookDetail = ({
             />
           )}
 
-          <div className="w-2/12">
+          <div className="sm:w-2/5 md:w-1/3 lg:w-2/12 flex items-start h-100">
             {book.volumeInfo.imageLinks && (
               <img
+                className="w-full h-full object-contain"
                 src={book.volumeInfo.imageLinks.thumbnail}
                 alt={book.volumeInfo.title}
               />
             )}
           </div>
 
-          <div className="w-10/12 ml-4">
+          <div className="w-100 sm:w-2/3 lg:w-10/12 ml-0 sm:ml-4">
             <h1 className="text-3xl text-secondary">{book.volumeInfo.title}</h1>
             {book.volumeInfo.authors && (
               <Authors authors={book.volumeInfo.authors} classes="mb-0" />
             )}
-            <span className="text-orange-700 text-sm">
-              Publisher: {book.volumeInfo.publisher}
-            </span>
+            <h3 className="text-lg mt-5">Description</h3>
             <p
-              className="text-grey-light"
+              className="text-grey-500"
               dangerouslySetInnerHTML={{ __html: book.volumeInfo.description }}
             ></p>
           </div>

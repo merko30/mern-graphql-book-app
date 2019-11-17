@@ -5,6 +5,8 @@ import { loader } from "graphql.macro";
 import Loading from "../common/Loading";
 import Error from "../common/Error";
 
+import UserBookList from "../books/UserBookList";
+
 const query = loader("../graphql/me.graphql");
 
 const Dashboard = () => {
@@ -17,8 +19,7 @@ const Dashboard = () => {
     console.log(data);
     return (
       <div className="mt-10 container">
-        <p className="text-secondary">books loaded</p>
-        {/* <UserBookList books={books} /> */}
+        <UserBookList books={data.me.books} />
       </div>
     );
   }

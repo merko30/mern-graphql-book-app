@@ -24,7 +24,7 @@ const App = () => (
       <Switch>
         <GuestRoute path="/login" component={Login} />
         <GuestRoute path="/register" component={Register} />
-        <Route exact path="/" component={Home} />
+        <GuestRoute exact path="/" component={Home} />
         <ProtectedRoute path="/dashboard" component={Dashboard} />
         <ProtectedRoute path="/search" component={Search} />
         <Route path="/book/:id" component={BookDetail} />

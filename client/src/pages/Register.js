@@ -18,7 +18,7 @@ const Register = () => {
 
   const [errors, setErrors] = useState({});
 
-  const [registerMutation, { data, error, loading }] = useMutation(register);
+  const [registerMutation, { error }] = useMutation(register);
 
   return (
     <div className="h-screen flex items-center justify-center flex-col">
