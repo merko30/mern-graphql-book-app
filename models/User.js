@@ -3,12 +3,15 @@ const bcrypt = require("bcryptjs");
 const Schema = require("mongoose").Schema;
 const jwt = require("jsonwebtoken");
 
-const UserSchema = mongoose.Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
-  books: [{ type: Schema.Types.ObjectId, ref: "Book" }]
-});
+const UserSchema = mongoose.Schema(
+  {
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    books: [{ type: Schema.Types.ObjectId, ref: "Book" }]
+  },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
 UserSchema.pre("save", function(next) {
   if (!this.isModified("password")) {

@@ -3,7 +3,7 @@ const apollo = require("apollo-server");
 const schema = apollo.gql`
     type Query {
         message: String,
-        me(id: String): User
+        me(id: String): MeResponse
     },
     type Mutation {
         addBook(title: String, authors: [String],bookID: String, cover: String ,status: String): BookResponse,
@@ -28,7 +28,16 @@ const schema = apollo.gql`
         _id: String,
         username: String,
         email: String,
-        books: [Book]
+        books: [Book],
+    }
+    type MeResponse {
+        _id: String,
+        username: String,
+        email: String,
+        books: [Book],
+        wishlistCount: Int,
+        readingCount: Int,
+        readCount: Int
     }
     type LoginResponse {
         token: String,

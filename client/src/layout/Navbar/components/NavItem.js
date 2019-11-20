@@ -9,14 +9,14 @@ const NavItem = ({ button, onClick, show, to, children }) => {
       {button ? (
         <button
           onClick={onClick}
-          className="hover:text-gray-800 no-underline text-gray-700 text-sm uppercase m-3"
+          className="hover:text-gray-800 no-underline text-gray-700 text-sm uppercase mx-3"
         >
           {children}
         </button>
       ) : (
         <Link
           to={to}
-          className="p-3 md:p-5 text-sm uppercase text-gray-700 hover:text-gray-800 no-underline"
+          className="px-3 md:px-5 text-sm uppercase text-gray-700 hover:text-gray-800 no-underline"
         >
           {children}
         </Link>

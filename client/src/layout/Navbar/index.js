@@ -39,6 +39,9 @@ const Navbar = ({ blacklist }) => {
           <NavItem show={loggedIn} to="/search">
             Search books
           </NavItem>
+          <NavItem show={loggedIn} to="/dashboard">
+            My books
+          </NavItem>
           <NavItem show={loggedIn} button={true} onClick={handleLogout}>
             Logout
           </NavItem>

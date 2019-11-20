@@ -36,7 +36,7 @@ const MutationItem = ({ mutation, variables, afterMutation, bookStatus }) => {
 
   return (
     <li
-      className="hover:bg-primary p-2 cursor-pointer w-48"
+      className="block hover:bg-primary p-2 cursor-pointer w-48"
       onClick={() =>
         mutate({
           variables

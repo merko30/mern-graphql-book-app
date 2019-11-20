@@ -25,7 +25,8 @@ const server = new ApolloServer({
     if (req.headers.authorization) {
       const token = req.headers.authorization.split(" ")[1];
       const userID = decode(token);
-      return { Book, User, userID };
+
+      return { id: userID.id, Book, User };
     } else {
       return { Book, User };
     }

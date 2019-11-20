@@ -1,23 +1,22 @@
-import React from 'react'
-import BookRow from './components/BookRow';
+import React from "react";
+import BookRow from "./components/BookRow";
 
 export default function BookTable({ books }) {
-    return (
-        <table className="w-3/5">
-            <thead>
-                <tr className="border-b border-grey-light mb-3">
-                    <td>Cover</td>
-                    <td>Book name</td>
-                    <td>Authors</td>
-                    <td>Status</td>
-                </tr>
-            </thead>
-            <tbody>
-
-                {books.map((book, i) => {
-                    return <BookRow key={i} book={book} />
-                })}
-            </tbody>
-        </table>
-    )
+  return (
+    <table className="table-fixed overflow-x-scroll">
+      <thead>
+        <tr>
+          <th className="hidden sm:block">Cover</th>
+          <th>Book name</th>
+          <th>Authors</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {books.map((book, i) => {
+          return <BookRow key={i} book={book} />;
+        })}
+      </tbody>
+    </table>
+  );
 }

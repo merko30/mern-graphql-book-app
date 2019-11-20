@@ -7,19 +7,16 @@ import Authors from "./Authors";
 const UserBookItem = ({ book }) => {
   const { title, bookID, cover, authors } = book;
   return (
-    <li className="list-reset flex my-5 md:w-1/2 lg:w-1/3 min-h-12 relative pr-12">
+    <li className="list-reset my-5 relative mx-10 scale-hover inline-block">
       <Link to={`/book/${bookID}`} className="no-underline text-black">
-        <div className="flex flex-col md:flex-row">
-          <div>
-            <img src={cover} alt={title} className="object-cover" />
-          </div>
-          <div className="mx-1 md:mx-4 w-32">
-            <h4 className="text-grey-darkest">{title}</h4>
-            <Authors authors={authors} />
-          </div>
+        <div className="w-16 h-24">
+          <img
+            src={cover}
+            alt={title}
+            className="object-contain w-full h-full"
+          />
         </div>
       </Link>
-      <BookMenu book={book} />
     </li>
   );
 };

@@ -14,6 +14,7 @@ import Search from "./pages/Search";
 import BookDetail from "./pages/BookDetail";
 
 import history from "./history";
+import List from "./pages/List";
 
 const blacklist = ["/login", "/register", "/"];
 
@@ -24,11 +25,12 @@ const App = () => (
       <Switch>
         <GuestRoute path="/login" component={Login} />
         <GuestRoute path="/register" component={Register} />
-        <GuestRoute exact path="/" component={Home} />
+        <Route exact path="/" component={Home} />
         <ProtectedRoute path="/dashboard" component={Dashboard} />
+        <ProtectedRoute path="/lists/:listname" component={List} />
         <ProtectedRoute path="/search" component={Search} />
         <Route path="/book/:id" component={BookDetail} />
-        <Redirect from="*" to="/dashboard" />
+        <Redirect from="*" to="/" />
       </Switch>
     </div>
   </Router>
