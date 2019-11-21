@@ -5,15 +5,15 @@ import { loader } from "graphql.macro";
 import Menu from "../common/Menu";
 import MutationItem from "./MutationItem";
 
-const meQuery = loader("../graphql/me.graphql");
+const booksQuery = loader("../graphql/books.graphql");
 const addBook = loader("../graphql/addBook.graphql");
 const updateBook = loader("../graphql/updateBook.graphql");
 const deleteBook = loader("../graphql/deleteBook.graphql");
 
 const statuses = ["Currently Reading", "Read", "Wishlist"];
 
-const BookMenu = ({ handleMenu, alert, show, book, classes }) => {
-  const { data, refetch } = useQuery(meQuery);
+const BookMenu = ({ handleMenu, book, classes }) => {
+  const { data, refetch } = useQuery(booksQuery);
 
   useEffect(() => {
     refetch();
@@ -36,7 +36,7 @@ const BookMenu = ({ handleMenu, alert, show, book, classes }) => {
     }
   };
 
-  const books = data && data.me && data.me.books;
+  const books = data && data.books && data.books.books;
   return (
     <div className={`absolute top-0 right-0 ${classes}`}>
       {books && !books.filter(b => b.bookID === book.bookID).length > 0 && (

@@ -21,7 +21,8 @@ const BookSchema = mongoose.Schema({
       type: String,
       required: true
     }
-  ]
+  ],
+  userId: String
 });
 
 module.exports = mongoose.model("Book", BookSchema);

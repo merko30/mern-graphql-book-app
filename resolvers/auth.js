@@ -1,22 +1,12 @@
 const resolvers = {
   Query: {
-    me: async (_, __, { id, User, Book }, ___) => {
+    me: async (_, __, { id, User }, ___) => {
       if (id) {
-        const { _id, username, email, books } = await User.findOne({
+        return await User.findOne({
           _id: id
-        }).populate("books");
-
-        return {
-          _id,
-          username,
-          email,
-          books,
-          wishlistCount,
-          readingCount,
-          readCount
-        };
+        });
       } else {
-        throw new AuthenticationError("You are not logged in");
+        throw new Error("Unauthorized");
       }
     }
   },
@@ -26,7 +16,7 @@ const resolvers = {
         $or: [{ username }, { email }]
       });
       if (user) {
-        throw new AuthenticationError("User alredy exists");
+        throw new Error("User alredy exists");
       } else {
         await User.create({
           username,
@@ -37,19 +27,16 @@ const resolvers = {
       }
     },
     login: async (_, { email, password }, { User }, __) => {
-      const user = await User.findOne({ email: email }).populate(
-        "books",
-        "books.author"
-      );
+      const user = await User.findOne({ email: email });
       if (!user) {
-        throw new AuthenticationError("User not found");
+        throw new Error("User not found");
       }
       if (user) {
         if (user.isValidPassword(password)) {
           const token = user.createToken();
           return { token, user };
         } else {
-          throw new AuthenticationError("Passwords don't match");
+          throw new Error("Wrong password");
         }
       }
     }

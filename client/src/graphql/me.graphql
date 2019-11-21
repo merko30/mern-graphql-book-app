@@ -1,14 +1,7 @@
-query {
+query me {
   me {
     username
     email
-    books {
-      title
-      authors
-      status
-      bookID
-      _id
-      cover
-    }
+    _id
   }
 }

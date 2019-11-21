@@ -1,6 +1,5 @@
 mutation changeStatus($id: String, $status: String) {
   changeStatus(id: $id, status: $status) {
-    message
     book {
       _id
       status

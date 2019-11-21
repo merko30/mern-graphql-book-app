@@ -2,16 +2,9 @@ mutation login($email: String, $password: String) {
   login(email: $email, password: $password) {
     token
     user {
+      _id
       username
       email
-      books {
-        title
-        authors
-        status
-        bookID
-        _id
-        cover
-      }
     }
   }
 }

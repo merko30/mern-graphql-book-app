@@ -17,7 +17,7 @@ const useAuth = () => {
     } else if (error) {
       setLoading(false);
     }
-  }, [data]);
+  }, [data, error]);
 
   return {
     loggedIn,

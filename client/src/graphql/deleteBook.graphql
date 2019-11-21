@@ -1,5 +1,5 @@
 mutation deleteBook($id: String) {
   deleteBook(id: $id) {
-    message
+    ok
   }
 }

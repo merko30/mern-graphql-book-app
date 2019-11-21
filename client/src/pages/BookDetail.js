@@ -10,7 +10,7 @@ import Loading from "../common/Loading";
 import BookMenu from "../books/BookMenu";
 import Authors from "../books/Authors";
 
-const query = loader("../graphql/me.graphql");
+const query = loader("../graphql/books.graphql");
 
 const BookDetail = ({
   match: {
@@ -48,7 +48,7 @@ const BookDetail = ({
       {loading && <Loading />}
       {book && (
         <div className="mx-auto flex flex-col sm:flex-row items-start justify-center">
-          {data && data.me && book && (
+          {data && data.books && (
             <BookMenu
               classes="mr-10"
               show={show}

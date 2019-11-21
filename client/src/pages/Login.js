@@ -39,7 +39,7 @@ const Login = ({ history }) => {
   return (
     <div className="h-screen flex items-center justify-center flex-col">
       <form
-        className="p-16 bg-primary rounded shadow-lg md:mx-auto"
+        className="p-16 bg-primary rounded shadow-lg md:mx-auto mx-5"
         onSubmit={e => {
           e.preventDefault();
           setErrors(validate({ email, password }));

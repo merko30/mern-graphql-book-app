@@ -4,7 +4,6 @@ import useAuth from "../auth/useAuth";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { loggedIn, loading } = useAuth();
-  console.log("loading", loading, "loggedIn", loggedIn);
   return !loading ? (
     <Route
       {...rest}

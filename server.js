@@ -22,10 +22,9 @@ const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
   context: async ({ req }) => {
-    if (req.headers.authorization) {
+    if (req.headers.authorization && req.headers.authorization !== "null") {
       const token = req.headers.authorization.split(" ")[1];
       const userID = decode(token);
-
       return { id: userID.id, Book, User };
     } else {
       return { Book, User };

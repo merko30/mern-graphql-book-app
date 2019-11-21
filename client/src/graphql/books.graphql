@@ -1,0 +1,11 @@
+query books($status: String, $perPage: Int, $page: Int) {
+  books(status: $status, perPage: $perPage, page: $page) {
+    books {
+      _id
+      bookID
+      title
+      cover
+      status
+    }
+  }
+}

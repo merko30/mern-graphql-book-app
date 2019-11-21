@@ -12,7 +12,6 @@ mutation addBook(
     authors: $authors
     cover: $cover
   ) {
-    message
     book {
       _id
       authors

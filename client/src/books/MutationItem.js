@@ -2,7 +2,7 @@ import React from "react";
 import { useMutation } from "react-apollo";
 import { loader } from "graphql.macro";
 
-const query = loader("../graphql/me.graphql");
+const query = loader("../graphql/books.graphql");
 
 const MutationItem = ({ mutation, variables, afterMutation, bookStatus }) => {
   let mutationName = mutation.definitions[0].name.value;
@@ -14,21 +14,23 @@ const MutationItem = ({ mutation, variables, afterMutation, bookStatus }) => {
 
       // if is addBook, push to cached books
       if (mutationName === "addBook") {
-        cached.me.books.push(data[mutationName].book);
+        cached.books.books.push(data[mutationName].book);
         store.writeQuery({ query, data: cached });
 
         // if is changeStatus it finds book and replaces with updated one
       } else if (mutationName === "changeStatus") {
         let updatedBook = data[mutationName].book;
-        let bookIndex = cached.me.books.findIndex(b => b._id === variables.id);
-        cached.me.books[bookIndex] = updatedBook;
+        let bookIndex = cached.books.books.findIndex(
+          b => b._id === variables.id
+        );
+        cached.books.books[bookIndex] = updatedBook;
 
         store.writeQuery({ query, data: cached });
 
         // if book deleted, removes the book from cache
       } else if (mutationName === "deleteBook") {
-        let books = cached.me.books.filter(b => b._id !== variables.id);
-        cached.me.books = books;
+        let books = cached.books.books.filter(b => b._id !== variables.id);
+        cached.books.books = books;
         store.writeQuery({ query, data: cached });
       }
     }

@@ -5,8 +5,8 @@ import UserBookItem from "./UserBookItem";
 
 const UserBookList = ({ books, listName }) => {
   return (
-    <div className="mx-auto flex flex-col items-center whitespace-no-wrap">
-      <div className="w-1/2 flex">
+    <>
+      <div className="w-1/2 flex mx-auto">
         <h1
           className="text-sm mb-1 uppercase"
           style={{ letterSpacing: "0.1em" }}
@@ -20,13 +20,15 @@ const UserBookList = ({ books, listName }) => {
           See all
         </Link>
       </div>
-      <hr style={{ height: "1px" }} className="w-1/2" />
-      <ul className="flex justify-center overflow-x-scroll">
-        {books.slice(0, 5).map(b => (
-          <UserBookItem book={b} key={b._id} />
-        ))}
-      </ul>
-    </div>
+      <hr style={{ height: "1px" }} className="w-1/2 mx-auto" />
+      <div className="flex flex-col overflow-x-scroll">
+        <ul className="flex">
+          {books.slice(0, 5).map(b => (
+            <UserBookItem book={b} key={b._id} />
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 

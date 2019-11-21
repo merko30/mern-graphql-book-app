@@ -1,54 +1,58 @@
 const resolvers = {
   Query: {
-    counts: async (_, __, { Book }, ___) => {
-      const wishlistCount = await Book.countDocuments({ status: "Wishlist" });
-      const readingCount = await Book.countDocuments({
-        status: "Currently reading"
-      });
-      const readCount = await Book.countDocuments({ status: "Read" });
+    books: async (_, { status, page = 1, perPage = 15 }, { id, Book }, ___) => {
+      if (!id) {
+        throw new Error("Unauthorized");
+      }
+      const limit = perPage;
+      const skip = page * perPage - perPage;
+      const query = { userId: id };
 
-      return { wishlistCount, readingCount, readCount };
+      if (status) {
+        query.status = status;
+      }
+      const books = await Book.find(query)
+        .limit(limit)
+        .skip(skip);
+
+      return {
+        books
+      };
     }
   },
   Mutation: {
     addBook: async (_, args, context, __) => {
-      if (context.userID.id) {
-        const user = await context.User.findOne({ _id: context.userID.id });
+      if (context.id) {
+        const user = await context.User.findOne({ _id: context.id });
         const book = await context.Book.create(args);
-        await user.books.push(book._id);
+        book.userId = user.id;
 
-        await user.save();
+        await book.save();
 
-        return { book, message: "Book Added" };
+        return { book };
       } else {
         throw new AuthenticationError("You are not logged in");
       }
     },
     changeStatus: async (obj, { id, status }, context, info) => {
-      if (context.userID.id) {
+      if (context.id) {
         const book = await context.Book.findOne({ _id: id });
 
         book.status = status;
         await book.save();
 
-        return { book, message: "Book status changed" };
+        return { book };
       } else {
-        throw new AuthenticationError("You are not logged in");
+        throw new AuthenticationError("Unauthorized");
       }
     },
     deleteBook: async (obj, { id }, context, info) => {
-      if (context.userID) {
-        const user = await context.User.findOne({ _id: context.userID.id });
-
+      if (context.id) {
         await context.Book.findOneAndDelete({ _id: id });
 
-        await user.books.filter(book => book._id !== id);
-
-        user.save();
-
-        return { message: "Book deleted" };
+        return { ok: true };
       } else {
-        throw new AuthenticationError("You are not logged in");
+        throw new AuthenticationError("Unauthorized");
       }
     }
   }

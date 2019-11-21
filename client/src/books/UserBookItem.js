@@ -1,11 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import BookMenu from "./BookMenu";
-import Authors from "./Authors";
-
 const UserBookItem = ({ book }) => {
-  const { title, bookID, cover, authors } = book;
+  const { title, bookID, cover } = book;
   return (
     <li className="list-reset my-5 relative mx-10 scale-hover inline-block">
       <Link to={`/book/${bookID}`} className="no-underline text-black">
