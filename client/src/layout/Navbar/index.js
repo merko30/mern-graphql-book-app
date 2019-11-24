@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useApolloClient, useQuery } from "react-apollo";
 import { loader } from "graphql.macro";
@@ -10,6 +10,7 @@ const query = loader("../../graphql/me.graphql");
 
 const Navbar = ({ blacklist }) => {
   const { pathname } = useLocation();
+  const [show, setShow] = useState(false);
   const { data, loading } = useQuery(query);
   const client = useApolloClient();
 
@@ -19,15 +20,27 @@ const Navbar = ({ blacklist }) => {
   };
 
   const loggedIn = data && data.me;
+  const menuClass = show ? "flex" : "hidden";
 
   return !blacklist.includes(pathname) ? (
-    <div className="container flex items-center justify-between my-2">
+    <div className="container flex flex-col md:flex-row items-center justify-between my-2">
       <Link to="/">
         <Logo size="xl" />
       </Link>
 
+      <button
+        className="block md:hidden absolute top-0 right-0 mx-4 my-2 w-8"
+        onClick={() => setShow(!show)}
+      >
+        <span className="block h-1 w-full bg-secondary my-1"></span>
+        <span className="block h-1 w-full bg-secondary my-1"></span>
+        <span className="block h-1 w-full bg-secondary my-1"></span>
+      </button>
+
       {!loading && (
-        <ul className="flex items-center justify-start">
+        <ul
+          className={`${menuClass} border-b border-primary md:border-0 w-full md:flex items-center justify-end flex-col md:flex-row`}
+        >
           <NavItem show={!loggedIn} to="/register">
             Register
           </NavItem>
