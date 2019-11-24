@@ -1,15 +1,13 @@
-const auth = require("./auth");
-const book = require("./book");
+const path = require("path");
 
-const resolvers = {
-  Query: {
-    ...book.Query,
-    ...auth.Query
-  },
-  Mutation: {
-    ...book.Mutation,
-    ...auth.Mutation
-  }
-};
+const { fileLoader, mergeResolvers } = require("merge-graphql-schemas");
+
+const resolversArray = fileLoader(path.join(__dirname, "./**"), {
+  extensions: [".js"],
+  recursive: true
+  // globOptions: { ignore: ["**/data/**", "**/*.test.js"] }
+});
+
+const resolvers = mergeResolvers(resolversArray);
 
 module.exports = resolvers;

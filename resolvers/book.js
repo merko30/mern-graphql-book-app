@@ -20,6 +20,7 @@ const resolvers = {
       };
     }
   },
+
   Mutation: {
     addBook: async (_, args, context, __) => {
       if (context.id) {
@@ -54,6 +55,15 @@ const resolvers = {
       } else {
         throw new AuthenticationError("Unauthorized");
       }
+    }
+  },
+  BooksResponse: {
+    async counts(_, __, { Book }) {
+      return {
+        wishlist: await Book.countDocuments({ status: "Wishlist" }),
+        reading: await Book.countDocuments({ status: "Currently Reading" }),
+        read: await Book.countDocuments({ status: "Read" })
+      };
     }
   }
 };

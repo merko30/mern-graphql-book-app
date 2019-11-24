@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const connect = require("./config/database");
 
-const schema = require("./schema");
+const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 
 const Book = require("./models/Book");
@@ -19,7 +19,7 @@ const app = express();
 connect();
 
 const server = new ApolloServer({
-  typeDefs: schema,
+  typeDefs,
   resolvers,
   context: async ({ req }) => {
     if (req.headers.authorization && req.headers.authorization !== "null") {

@@ -15,10 +15,10 @@ import AlertTemplate from "react-alert-template-basic";
 
 import history from "./history";
 
-const options = {
-  timeout: 5000,
-  position: "bottom center"
-};
+// const options = {
+//   timeout: 5000,
+//   position: "bottom center"
+// };
 
 const httpLink = new HttpLink({
   uri: "http://localhost:8000/graphql"
@@ -42,9 +42,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={client}>
     <Router history={history}>
-      <Provider template={AlertTemplate} {...options}>
-        <App />
-      </Provider>
+      {/* <Provider template={AlertTemplate} {...options}> */}
+      <App />
+      {/* </Provider> */}
     </Router>
   </ApolloProvider>,
   document.getElementById("root")

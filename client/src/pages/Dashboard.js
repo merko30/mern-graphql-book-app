@@ -22,19 +22,19 @@ const Dashboard = () => {
     } = data;
     return (
       <div className="container">
-        <div className="py-10 h-full flex flex-col md:flex-row justify-center">
-          {/* <ReadingInfo
-            wishlistCount={data.me.wishlistCount}
-            readCount={data.me.readCount}
-            readingCount={data.me.readingCount}
-          /> */}
-          <div>
+        <div className="py-10 w-100 h-full flex flex-col md:flex-row justify-between">
+          <ReadingInfo
+            wishlistCount={data.books.counts.wishlist}
+            readCount={data.books.counts.read}
+            readingCount={data.books.counts.reading}
+          />
+          <div className="w-full">
             <UserBookList
               books={books.filter(b => b.status === "Wishlist")}
               listName="Wishlist"
             />
             <UserBookList
-              books={books.filter(b => b.status === "Currently reading")}
+              books={books.filter(b => b.status === "Currently Reading")}
               listName="Currently reading"
             />
             <UserBookList

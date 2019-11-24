@@ -7,5 +7,10 @@ query books($status: String, $perPage: Int, $page: Int) {
       cover
       status
     }
+    counts {
+      wishlist
+      reading
+      read
+    }
   }
 }
