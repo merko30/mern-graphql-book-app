@@ -40,12 +40,16 @@ const BookDetail = ({
   useEffect(() => {
     getBook();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   return (
     <div className="relative mt-10 flex flex-col md:flex-row items-center justify-center md:px-10 lg:px-24 container">
       {error && <Error error={error.message} />}
-      {loading && <Loading />}
+      {loading && (
+        <div className="flex items-center justify-center h-screen">
+          <Loading />
+        </div>
+      )}
       {book && (
         <div className="mx-auto flex flex-col sm:flex-row items-start justify-center">
           {data && data.books && (

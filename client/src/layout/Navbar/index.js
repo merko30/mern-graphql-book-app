@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useApolloClient, useQuery } from "react-apollo";
 import { loader } from "graphql.macro";
 
 import NavItem from "./components/NavItem";
 import Logo from "../../common/Logo";
+import MenuButton from "./components/MenuButton";
+import Search from "./components/Search";
 
 const query = loader("../../graphql/me.graphql");
 
@@ -15,27 +17,33 @@ const Navbar = ({ blacklist }) => {
   const client = useApolloClient();
 
   const handleLogout = async () => {
-    localStorage.clear();
+    localStorage.removeItem("token");
+    await client.resetStore();
     await client.clearStore();
+    client.writeQuery({ query, data: { me: null } });
   };
-
   const loggedIn = data && data.me;
   const menuClass = show ? "flex" : "hidden";
 
+  const handleMenu = () => {
+    if (window.innerWidth > 768) {
+      setShow(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleMenu);
+
+    return () => window.removeEventListener("resize", handleMenu);
+  }, []);
+
   return !blacklist.includes(pathname) ? (
-    <div className="container flex flex-col md:flex-row items-center justify-between my-2">
+    <div className="container flex flex-col md:flex-row items-center justify-between pt-2 mb-10">
       <Link to="/">
         <Logo size="xl" />
       </Link>
 
-      <button
-        className="block md:hidden absolute top-0 right-0 mx-4 my-2 w-8"
-        onClick={() => setShow(!show)}
-      >
-        <span className="block h-1 w-full bg-secondary my-1"></span>
-        <span className="block h-1 w-full bg-secondary my-1"></span>
-        <span className="block h-1 w-full bg-secondary my-1"></span>
-      </button>
+      <MenuButton onClick={() => setShow(!show)} />
 
       {!loading && (
         <ul
@@ -49,9 +57,8 @@ const Navbar = ({ blacklist }) => {
             Login
           </NavItem>
 
-          <NavItem show={loggedIn} to="/search">
-            Search books
-          </NavItem>
+          <Search />
+
           <NavItem show={loggedIn} to="/dashboard">
             My books
           </NavItem>

@@ -16,6 +16,7 @@ const useAuth = () => {
       setLoading(false);
     } else if (error) {
       setLoading(false);
+      setLoggedIn(false);
     }
   }, [data, error]);
 

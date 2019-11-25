@@ -18,6 +18,7 @@ const schema = gql`
   type BooksResponse {
     books: [Book]
     counts: Counts
+    totalPages: Int
   }
   type BookResponse {
     book: Book

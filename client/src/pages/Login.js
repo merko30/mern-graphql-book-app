@@ -13,8 +13,8 @@ const login = loader("../graphql/login.graphql");
 const meQuery = loader("../graphql/me.graphql");
 
 const Login = ({ history }) => {
-  const [email, setEmail] = useState("gessg@g.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
   const [loginMutation, { error }] = useMutation(login, {

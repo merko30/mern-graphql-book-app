@@ -15,8 +15,12 @@ const resolvers = {
         .limit(limit)
         .skip(skip);
 
+      const count = await Book.countDocuments();
+      const totalPages = Math.ceil(count / perPage);
+
       return {
-        books
+        books,
+        totalPages
       };
     }
   },

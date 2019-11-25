@@ -12,5 +12,6 @@ query books($status: String, $perPage: Int, $page: Int) {
       reading
       read
     }
+    totalPages
   }
 }

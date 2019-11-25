@@ -13,7 +13,12 @@ const query = loader("../graphql/books.graphql");
 const Dashboard = () => {
   const { data, loading, error } = useQuery(query);
 
-  if (loading) return <Loading />;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loading />
+      </div>
+    );
   if (error) return <Error error={error.message} />;
 
   if (data) {
@@ -22,7 +27,7 @@ const Dashboard = () => {
     } = data;
     return (
       <div className="container">
-        <div className="py-10 w-100 h-full flex flex-col md:flex-row justify-between">
+        <div className="py-10 w-100 h-full flex flex-col lg:flex-row justify-between">
           <ReadingInfo
             wishlistCount={data.books.counts.wishlist}
             readCount={data.books.counts.read}
@@ -46,7 +51,7 @@ const Dashboard = () => {
       </div>
     );
   }
-  return <p>hello</p>;
+  return null;
 };
 
 export default Dashboard;

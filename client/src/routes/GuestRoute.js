@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
 
 import useAuth from "../auth/useAuth";
 
 const GuestRoute = ({ component: Component, ...rest }) => {
   const { loggedIn, loading } = useAuth();
+
+  useEffect(() => {}, [loggedIn]);
 
   return !loading ? (
     <Route

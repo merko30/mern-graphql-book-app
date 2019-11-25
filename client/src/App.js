@@ -10,7 +10,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Search from "./pages/Search";
 import BookDetail from "./pages/BookDetail";
 
 import history from "./history";
@@ -28,7 +27,6 @@ const App = () => (
         <Route exact path="/" component={Home} />
         <ProtectedRoute path="/dashboard" component={Dashboard} />
         <ProtectedRoute path="/lists/:listname" component={List} />
-        <ProtectedRoute path="/search" component={Search} />
         <Route path="/book/:id" component={BookDetail} />
         <Redirect from="*" to="/" />
       </Switch>
