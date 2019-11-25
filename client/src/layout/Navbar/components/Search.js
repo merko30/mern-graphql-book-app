@@ -77,7 +77,7 @@ const Search = () => {
                   key={book.id}
                   to={`/book/${book.id}`}
                   ref={menuRef}
-                  className="block border-b p-2 rounded hover:bg-primary"
+                  className="block border-b border-primary p-2 hover:bg-primary"
                 >
                   {book.volumeInfo.title}
                 </Link>

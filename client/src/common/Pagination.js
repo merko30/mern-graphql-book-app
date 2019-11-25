@@ -12,6 +12,7 @@ const Pagination = ({ pagesCount, onClick, active }) => {
             <span
               className={`text-secondary p-2 border border-primary ${activeClass}`}
               onClick={() => onClick(i + 1)}
+              key={i}
             >
               {i + 1}
             </span>

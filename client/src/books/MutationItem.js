@@ -12,6 +12,13 @@ const MutationItem = ({ mutation, variables, afterMutation, bookStatus }) => {
       // read the cache
       const cached = store.readQuery({ query });
 
+      const countName = status =>
+        status === "Currently Reading"
+          ? "reading"
+          : status === "Read"
+          ? "read"
+          : "wishlist";
+
       // if is addBook, push to cached books
       if (mutationName === "addBook") {
         cached.books.books.push(data[mutationName].book);
@@ -29,7 +36,7 @@ const MutationItem = ({ mutation, variables, afterMutation, bookStatus }) => {
 
         // if book deleted, removes the book from cache
       } else if (mutationName === "deleteBook") {
-        let books = cached.books.books.filter(b => b._id !== variables.id);
+        let books = cached.books.books.filter(b => b.bookID !== variables.id);
         cached.books.books = books;
         store.writeQuery({ query, data: cached });
       }

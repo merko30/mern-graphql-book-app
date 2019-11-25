@@ -14,6 +14,7 @@ import BookDetail from "./pages/BookDetail";
 
 import history from "./history";
 import List from "./pages/List";
+import Footer from "./layout/Footer";
 
 const blacklist = ["/login", "/register", "/"];
 
@@ -31,6 +32,7 @@ const App = () => (
         <Redirect from="*" to="/" />
       </Switch>
     </div>
+    <Footer />
   </Router>
 );
 

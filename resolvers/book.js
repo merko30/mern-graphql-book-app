@@ -53,7 +53,7 @@ const resolvers = {
     },
     deleteBook: async (obj, { id }, context, info) => {
       if (context.id) {
-        await context.Book.findOneAndDelete({ _id: id });
+        await context.Book.findOneAndDelete({ bookID: id });
 
         return { ok: true };
       } else {
@@ -62,11 +62,14 @@ const resolvers = {
     }
   },
   BooksResponse: {
-    async counts(_, __, { Book }) {
+    async counts(_, __, { id, Book }) {
       return {
-        wishlist: await Book.countDocuments({ status: "Wishlist" }),
-        reading: await Book.countDocuments({ status: "Currently Reading" }),
-        read: await Book.countDocuments({ status: "Read" })
+        wishlist: await Book.countDocuments({ userId: id, status: "Wishlist" }),
+        reading: await Book.countDocuments({
+          userId: id,
+          status: "Currently Reading"
+        }),
+        read: await Book.countDocuments({ userId: id, status: "Read" })
       };
     }
   }

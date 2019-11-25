@@ -74,8 +74,8 @@ const BookMenu = ({ handleMenu, book, classes }) => {
           <MutationItem
             mutation={deleteBook}
             afterMutation={showMessage}
-            variables={{ id: book._id }}
-            bookStatus={"Delete"}
+            variables={{ id: book.bookID }}
+            bookStatus="Delete"
           />
         </Menu>
       )}

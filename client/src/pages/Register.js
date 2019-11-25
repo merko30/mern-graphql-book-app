@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "react-apollo";
 import { loader } from "graphql.macro";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { validate } from "../utils/validate";
 
@@ -12,13 +12,16 @@ import Error from "../common/Error";
 const register = loader("../graphql/register.graphql");
 
 const Register = () => {
+  const history = useHistory();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState({});
 
-  const [registerMutation, { error }] = useMutation(register);
+  const [registerMutation, { error }] = useMutation(register, {
+    onCompleted: () => history.push("/login")
+  });
 
   return (
     <div className="h-screen flex items-center justify-center flex-col">
@@ -34,7 +37,7 @@ const Register = () => {
           }
         }}
       >
-        {error && <Error error={error.message} />}
+        {error && <Error error={error.message.split(":")[1]} />}
         <div>
           <TextInput
             label="Username"
