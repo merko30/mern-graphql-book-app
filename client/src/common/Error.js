@@ -1,8 +1,5 @@
-
-import React from 'react'
+import React from "react";
 
 export default function Error({ error }) {
-    return (
-        <p className="text-red-light font-bold">{error}</p>
-    )
+  return <p className="text-red-600 font-bold">{error}</p>;
 }

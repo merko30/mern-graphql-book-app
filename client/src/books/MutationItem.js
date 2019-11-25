@@ -12,13 +12,6 @@ const MutationItem = ({ mutation, variables, afterMutation, bookStatus }) => {
       // read the cache
       const cached = store.readQuery({ query });
 
-      const countName = status =>
-        status === "Currently Reading"
-          ? "reading"
-          : status === "Read"
-          ? "read"
-          : "wishlist";
-
       // if is addBook, push to cached books
       if (mutationName === "addBook") {
         cached.books.books.push(data[mutationName].book);

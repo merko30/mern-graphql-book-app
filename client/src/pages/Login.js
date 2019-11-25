@@ -8,6 +8,7 @@ import { validate } from "../utils/validate";
 import TextInput from "../common/TextInput";
 import Button from "../common/Button";
 import Error from "../common/Error";
+import Loading from "../common/Loading";
 
 const login = loader("../graphql/login.graphql");
 const meQuery = loader("../graphql/me.graphql");
@@ -17,7 +18,7 @@ const Login = ({ history }) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const [loginMutation, { error }] = useMutation(login, {
+  const [loginMutation, { error, loading }] = useMutation(login, {
     onCompleted(data) {
       localStorage.setItem("token", `Bearer ${data.login.token}`);
       history.push("/");
@@ -37,9 +38,9 @@ const Login = ({ history }) => {
   });
 
   return (
-    <div className="h-screen flex items-center justify-center flex-col">
+    <div className="h-screen flex items-center justify-center flex-col mx-5">
       <form
-        className="p-16 bg-primary rounded shadow-lg md:mx-auto mx-5"
+        className="w-full md:w-1/2 p-16 bg-primary rounded shadow-lg md:mx-auto"
         onSubmit={e => {
           e.preventDefault();
           setErrors(validate({ email, password }));
@@ -48,35 +49,39 @@ const Login = ({ history }) => {
           }
         }}
       >
-        {error && <Error error={error.message} />}
-        <div>
-          <TextInput
-            label="Email"
-            name="email"
-            type="text"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
+        {error && <Error error={error.message.split(":")[1]} />}
+        {loading ? (
+          <Loading />
+        ) : (
+          <div>
+            <TextInput
+              label="Email"
+              name="email"
+              type="text"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
 
-          {errors.email && <Error error={errors.email} />}
+            {errors.email && <Error error={errors.email} />}
 
-          <TextInput
-            label="Password"
-            type="password"
-            name="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-          {errors.password && <Error error={errors.password} />}
+            <TextInput
+              label="Password"
+              type="password"
+              name="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+            {errors.password && <Error error={errors.password} />}
 
-          <Link to="/register" className="block text-secondary mb-2 text-sm">
-            You don't have an account ?
-          </Link>
+            <Link to="/register" className="block text-secondary mb-2 text-sm">
+              You don't have an account ?
+            </Link>
 
-          <Button type="submit" color="orange">
-            Sign in
-          </Button>
-        </div>
+            <Button type="submit" color="orange">
+              Sign in
+            </Button>
+          </div>
+        )}
       </form>
     </div>
   );
