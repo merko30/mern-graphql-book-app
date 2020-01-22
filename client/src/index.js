@@ -21,7 +21,7 @@ import history from "./history";
 // };
 
 const httpLink = new HttpLink({
-  uri: process.env.GRAPHQL_URI || "http://localhost:8000/graphql"
+  uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:8000/graphql"
 });
 
 const authLink = setContext((_, { headers }) => {
