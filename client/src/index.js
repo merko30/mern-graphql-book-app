@@ -10,15 +10,7 @@ import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { setContext } from "apollo-link-context";
 
-import { Provider } from "react-alert";
-import AlertTemplate from "react-alert-template-basic";
-
 import history from "./history";
-
-// const options = {
-//   timeout: 5000,
-//   position: "bottom center"
-// };
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:8000/graphql"
@@ -42,9 +34,7 @@ const client = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={client}>
     <Router history={history}>
-      {/* <Provider template={AlertTemplate} {...options}> */}
       <App />
-      {/* </Provider> */}
     </Router>
   </ApolloProvider>,
   document.getElementById("root")
