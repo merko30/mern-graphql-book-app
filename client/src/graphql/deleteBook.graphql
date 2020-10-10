@@ -1,4 +1,4 @@
-mutation deleteBook($id: String) {
+mutation deleteBook($id: String!) {
   deleteBook(id: $id) {
     ok
   }

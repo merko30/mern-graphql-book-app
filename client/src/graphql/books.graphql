@@ -1,16 +1,12 @@
-query books($status: String, $perPage: Int, $page: Int) {
-  books(status: $status, perPage: $perPage, page: $page) {
+query books($input: BooksInput!) {
+  books(input: $input) {
     books {
       _id
-      bookID
+      id
       title
-      cover
+      thumbnail
       status
-    }
-    counts {
-      wishlist
-      reading
-      read
+      authors
     }
     totalPages
   }

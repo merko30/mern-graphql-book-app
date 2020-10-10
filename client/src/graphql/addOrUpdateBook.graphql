@@ -1,0 +1,10 @@
+mutation addOrUpdateBook($input: AddOrUpdateBookInput!) {
+  addOrUpdateBook(input: $input) {
+    _id
+    authors
+    title
+    id
+    thumbnail
+    status
+  }
+}

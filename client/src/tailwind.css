@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 button,
@@ -21,16 +21,9 @@ html {
 
 #root {
   min-height: 100vh;
-}
-
-.page {
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
-}
-
-.content {
-  flex: 1;
+  @apply bg-background;
 }
 
 .scale-hover:hover {
@@ -73,4 +66,13 @@ html {
     transform: scale(1);
     opacity: 0;
   }
+}
+
+.hideScrollBar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hideScrollBar::-webkit-scrollbar {
+  display: none;
 }
