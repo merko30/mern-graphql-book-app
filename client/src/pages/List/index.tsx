@@ -37,7 +37,7 @@ const List = ({
     return (
       <div className="container h-full w-full md:w-2/3 my-5">
         {error && <Error error={error.message} />}
-        <h1 className="text-2xl my-4 tracking-wider uppercase text-secondary">
+        <h1 className="text-2xl my-4 tracking-wider uppercase text-foreground">
           {capitalize(listname)}
         </h1>
         <BookList books={data.books.books} />

@@ -6,11 +6,9 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
-import Error from "../../common/Error";
-import Loading from "../../common/Loading";
+import { Error, Loading, IconWithLabel, BookMenu } from "../../common";
+
 import BookSuggestions from "./components/BookSuggestions";
-import BookMenu from "../../books/BookMenu";
-import IconWithLabel from "../../common/IconWithLabel";
 
 import {
   Status,
@@ -110,7 +108,7 @@ const BookDetail = ({
                 );
               })}
 
-            <div className="flex items-center my-2 bg-primary p-2 rounded justify-evenly">
+            <div className="flex items-center my-2 bg-background_two p-2 rounded justify-evenly">
               {data.getSingleBook.average_rating && (
                 <IconWithLabel
                   topLabel="average rating"

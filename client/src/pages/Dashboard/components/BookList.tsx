@@ -28,7 +28,7 @@ const BookList = ({ books, listName, count }: BookListProps) => {
           See all
         </Link>
       </div>
-      <hr style={{ height: "1px" }} className="text-primary" />
+      <hr style={{ height: "1px" }} className="text-background_two" />
       <div className="flex flex-col overflow-x-scroll w-full hideScrollBar">
         <ul className="flex">
           {books && books.length > 0 ? (

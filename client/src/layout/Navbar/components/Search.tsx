@@ -46,7 +46,7 @@ const Search = () => {
 
   return (
     <div className="container w-full relative px-0 mx-2">
-      <div className="flex items-center w-full shadow-sm bg-primary text-secondary rounded-md px-4 py-2">
+      <div className="flex items-center w-full shadow-sm bg-background_two text-foreground rounded-md px-4 py-2">
         <FontAwesomeIcon icon={faSearch} size="1x" />
         <input
           onChange={(e) => setTerm(e.target.value)}
@@ -56,7 +56,7 @@ const Search = () => {
         />
       </div>
       {searchActive && (
-        <div className="overflow-scroll h-64 bg-white border border-primary rounded-lg shadow-lg absolute top-0 mt-16 left-0 z-10 w-full">
+        <div className="overflow-scroll h-64 bg-white border border-background_two rounded-lg shadow-lg absolute top-0 mt-16 left-0 z-10 w-full">
           {loading && <Loading />}
           {error && <p>error</p>}
           {data &&
@@ -67,7 +67,7 @@ const Search = () => {
                   key={book.id}
                   to={`/book/${book.id}`}
                   ref={menuRef}
-                  className="block flex border-b border-primary p-2 hover:bg-primary"
+                  className="block flex border-b border-background_two p-2 hover:bg-background_two"
                 >
                   <img
                     src={book.image_url}

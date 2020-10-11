@@ -33,7 +33,7 @@ const BookSuggestions = ({ books }: BookSuggestionsProps) => {
 
   return (
     <div className="my-2 pb-4 w-full my-2 pb-4 w-full row-start-3 row-end-4 md:row-start-2 md:row-end-3 col-start-1 col-end-2">
-      <h1 className="text-sm my-3 text-secondary tracking-widest uppercase">
+      <h1 className="text-sm my-3 text-foreground tracking-widest uppercase">
         You might like:
       </h1>
       <div className="flex items-center justify-around">

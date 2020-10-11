@@ -1,11 +1,12 @@
 import React from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
+import * as yup from "yup";
 
-import TextInput from "../common/TextInput";
-import Button from "../common/Button";
-import Error from "../common/Error";
-import Loading from "../common/Loading";
+import { TextInput, Button, Error, LoadingTwo } from "../common";
+import { AuthLayout } from "../layout";
 
 import { useLoginMutation, MeDocument, MeQuery } from "../generated";
 
@@ -14,8 +15,17 @@ interface FormData {
   password: string;
 }
 
+const schema = yup.object().shape({
+  emailOrUsername: yup.string().required("Email or username is required"),
+  password: yup.string().required("Password is required"),
+});
+
 const Login = ({ history }: RouteComponentProps) => {
-  const { handleSubmit, errors, control } = useForm<FormData>();
+  const { handleSubmit, errors, control } = useForm<FormData>({
+    resolver: yupResolver(schema),
+    reValidateMode: "onSubmit",
+    mode: "onTouched",
+  });
 
   const [loginMutation, { error, loading }] = useLoginMutation({
     onCompleted: (data) => {
@@ -33,9 +43,13 @@ const Login = ({ history }: RouteComponentProps) => {
   });
 
   return (
-    <div className="h-screen flex items-center justify-center flex-col mx-5">
+    <AuthLayout
+      title="Welcome back"
+      text="You don't have an account?"
+      to="/register"
+      linkText="Sign up"
+    >
       <form
-        className="w-full md:w-1/2 p-16 bg-primary rounded shadow-lg md:mx-auto"
         onSubmit={handleSubmit(({ emailOrUsername, password }) => {
           loginMutation({
             variables: { input: { emailOrUsername, password } },
@@ -43,43 +57,40 @@ const Login = ({ history }: RouteComponentProps) => {
         })}
       >
         {error && <Error error={error.message} />}
-        {loading ? (
-          <Loading />
-        ) : (
-          <div>
-            <Controller
-              control={control}
-              defaultValue=""
-              name="emailOrUsername"
-              render={(props) => <TextInput {...props} label="Email" />}
+        <Controller
+          control={control}
+          defaultValue=""
+          name="emailOrUsername"
+          render={(props) => (
+            <TextInput
+              {...props}
+              icon={faUser}
+              placeholder="Email or username"
+              error={errors.emailOrUsername?.message}
             />
+          )}
+        />
 
-            {errors.emailOrUsername && (
-              <Error error={errors.emailOrUsername.message!} />
-            )}
-
-            <Controller
-              control={control}
-              name="password"
-              defaultValue=""
-              render={(props) => (
-                <TextInput {...props} type="password" label="Password" />
-              )}
+        <Controller
+          control={control}
+          name="password"
+          defaultValue=""
+          render={(props) => (
+            <TextInput
+              {...props}
+              type="password"
+              icon={faKey}
+              placeholder="Password"
+              error={errors.password?.message}
             />
+          )}
+        />
 
-            {errors.password && <Error error={errors.password.message!} />}
-
-            <Link to="/register" className="block text-secondary mb-2 text-sm">
-              You don't have an account ?
-            </Link>
-
-            <Button type="submit" color="orange">
-              Sign in
-            </Button>
-          </div>
-        )}
+        <Button type="submit" className="w-full">
+          {loading ? <LoadingTwo /> : "Sign in"}
+        </Button>
       </form>
-    </div>
+    </AuthLayout>
   );
 };
 

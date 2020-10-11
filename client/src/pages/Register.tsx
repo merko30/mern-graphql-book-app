@@ -1,12 +1,14 @@
 import React from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
-
-import TextInput from "../common/TextInput";
-import Button from "../common/Button";
-import Error from "../common/Error";
-import Loading from "../common/Loading";
-import { useRegisterMutation } from "../generated";
+import { RouteComponentProps } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
+import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
+import * as yup from "yup";
+
+import { TextInput, Button, Error, Loading } from "../common";
+import { AuthLayout } from "../layout";
+
+import { useRegisterMutation } from "../generated";
 
 interface FormData {
   username: string;
@@ -14,56 +16,88 @@ interface FormData {
   password: string;
 }
 
+const schema = yup.object().shape({
+  username: yup
+    .string()
+    .required("Username is required")
+    .min(6, "Username should have at least 6 characters"),
+  email: yup.string().required("Email is required").email("Invalid email"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password should have at least 8 characters"),
+});
+
 const Register = ({ history }: RouteComponentProps) => {
-  const { handleSubmit, errors } = useForm<FormData>();
+  const { handleSubmit, errors, control } = useForm<FormData>({
+    shouldUnregister: false,
+    resolver: yupResolver(schema),
+    reValidateMode: "onSubmit",
+    mode: "onTouched",
+  });
 
   const [registerMutation, { error, loading }] = useRegisterMutation({
-    onCompleted: () => history.push("/"),
+    onCompleted: () => history.push("/login"),
   });
 
   return (
-    <div className="h-screen flex items-center justify-center flex-col mx-5">
+    <AuthLayout
+      title="Get started"
+      text="Already have an account?"
+      linkText="Sign in"
+      to="/login"
+    >
       <form
-        className="w-full md:w-1/2 p-16 md:mx-auto bg-primary rounded shadow-lg"
         onSubmit={handleSubmit((values) => {
           registerMutation({ variables: { input: values } });
         })}
       >
-        {error && <Error error={error.message.split(":")[1]} />}
-        {loading ? (
-          <Loading />
-        ) : (
-          <div>
-            <Controller
-              name="username"
-              render={(props) => <TextInput {...props} label="Username" />}
+        {error && <Error error={error.message} />}
+        <Controller
+          control={control}
+          name="username"
+          render={(props) => (
+            <TextInput
+              error={errors.username?.message}
+              icon={faUser}
+              {...props}
+              placeholder="Username"
             />
-            {errors.username && <Error error={errors.username.message!} />}
+          )}
+        />
 
-            <Controller
-              name="email"
-              render={(props) => <TextInput {...props} label="Email" />}
+        <Controller
+          control={control}
+          name="email"
+          render={(props) => (
+            <TextInput
+              error={errors.email?.message}
+              icon={faEnvelope}
+              {...props}
+              placeholder="Email"
             />
+          )}
+        />
 
-            {errors.email && <Error error={errors.email.message!} />}
-
-            <Controller
-              name="password"
-              render={(props) => <TextInput {...props} label="Password" />}
+        <Controller
+          control={control}
+          name="password"
+          render={(props) => (
+            <TextInput
+              error={errors.password?.message}
+              icon={faKey}
+              type="password"
+              {...props}
+              placeholder="Password"
             />
-            {errors.password && <Error error={errors.password.message!} />}
+          )}
+        />
 
-            <Link to="/login" className="block text-secondary mb-2 text-sm">
-              Already have an account ?
-            </Link>
-
-            <Button type="submit" color="orange">
-              Sign up
-            </Button>
-          </div>
-        )}
+        <Button type="submit" className="w-full">
+          {loading ? <Loading /> : "Sign up"}
+        </Button>
       </form>
-    </div>
+    </AuthLayout>
   );
 };
 

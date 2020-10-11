@@ -33,21 +33,16 @@ export class AuthResolver {
   @UseMiddleware(UserExists)
   @Mutation((_) => BooleanResponse)
   async register(@Arg("input") input: RegisterInput): Promise<BooleanResponse> {
-    try {
       const user = new User(input);
 
       await user.save();
       return {
         ok: true,
       };
-    } catch (error) {
-      throw new Error(error);
-    }
   }
 
   @Mutation((_) => LoginResponse)
   async login(@Arg("input") input: LoginInput): Promise<LoginResponse> {
-    try {
       const { emailOrUsername, password } = input;
       const user = await User.findOne({
         $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
@@ -66,8 +61,5 @@ export class AuthResolver {
       } else {
         throw new ApolloError("User not found");
       }
-    } catch (error) {
-      throw new ApolloError(error);
-    }
   }
 }

@@ -45,7 +45,7 @@ const Navbar = () => {
 
       {!loading && (
         <ul
-          className={`${menuClass} flex-1 pt-4 md:pt-0 border-b border-primary md:border-b-0 md:flex items-center justify-end flex-col md:flex-row`}
+          className={`${menuClass} flex-1 pt-4 md:pt-0 border-b border-background_two md:border-b-0 md:flex items-center justify-end flex-col md:flex-row`}
         >
           <NavItem show={!loggedIn} to="/register">
             Register

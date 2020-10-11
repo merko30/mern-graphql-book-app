@@ -77,7 +77,7 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
   return (
     <>
       <span
-        className="absolute top-0 right-0 shadow-sm mr-6 mt-10 p-2 w-10 h-10 flex justify-center items-center bg-primary cursor-pointer rounded-full inline-block"
+        className="absolute top-0 right-0 shadow-sm mr-6 mt-10 p-2 w-10 h-10 flex justify-center items-center bg-background_two cursor-pointer rounded-full inline-block"
         ref={iconRef}
         onClick={() => setMenuVisible((p) => !p)}
       >
@@ -94,7 +94,7 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
             statuses?.map((status) => (
               <span
                 key={status.value}
-                className="py-2 px-10 bg-white hover:bg-primary cursor-pointer"
+                className="py-2 px-10 bg-white hover:bg-background_two cursor-pointer"
                 onClick={() => onClick(status.value as Status)}
               >
                 {status.label}

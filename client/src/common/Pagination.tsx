@@ -13,10 +13,10 @@ const Pagination = ({ pagesCount, onClick, active }: PaginationProps) => {
     <div className="w-full flex justify-center my-2">
       {pages.length > 1 &&
         pages.map((_, i) => {
-          const activeClass = active === i + 1 ? "bg-primary" : "";
+          const activeClass = active === i + 1 ? "bg-background_two" : "";
           return (
             <span
-              className={`cursor-pointer text-secondary p-2 border border-primary ${activeClass} hover:bg-primary`}
+              className={`cursor-pointer text-foreground p-2 border border-background_two ${activeClass} hover:bg-background_two`}
               onClick={() => onClick(i + 1)}
               key={i}
             >

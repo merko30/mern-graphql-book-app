@@ -28,7 +28,7 @@ const Book = ({ book }: BookProps) => {
 
           <Link
             to={`/book/${book.id}`}
-            className="text-secondary self-end mt-auto"
+            className="text-foreground self-end mt-auto"
           >
             See more
             <FontAwesomeIcon icon={faArrowRight} className="ml-2" />

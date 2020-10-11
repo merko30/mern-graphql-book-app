@@ -1,3 +1,5 @@
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 interface ErrorProps {
@@ -5,7 +7,10 @@ interface ErrorProps {
 }
 
 const Error = ({ error }: ErrorProps) => {
-  return <p className="text-red-600 font-bold">{error}</p>;
+  return <div className="text-negative bg-red-300 rounded-lg p-2 flex items-center">
+    <FontAwesomeIcon icon={faTimesCircle} className="mr-2" />
+    <p className="font-bold text-sm">{error}</p>
+    </div>
 };
 
 export default Error;

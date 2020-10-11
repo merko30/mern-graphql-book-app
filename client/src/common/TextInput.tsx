@@ -1,43 +1,49 @@
+import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
 import React, { ChangeEvent, InputHTMLAttributes } from "react";
 
 interface TextInputProps {
   name: string;
-  label: string;
   onChange: (e: ChangeEvent) => void;
+  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
   value: string;
-  placeholder?: string;
+  placeholder: string;
+  icon: FontAwesomeIconProps['icon'];
+  error:string | undefined;
   id?: string;
   type?: InputHTMLAttributes<HTMLInputElement>["type"];
 }
 
 export default function TextInput({
   name,
-  label,
   id,
   placeholder,
   onChange,
+  onBlur,
   value,
   type,
+  icon,
+  error
 }: TextInputProps) {
+  const color = error ? 'negative' : 'neutral';
+  const border = error ? 'negative' : 'gray-200';
+
   return (
-    <div className="my-2">
-      {label && (
-        <label
-          htmlFor={name}
-          className="text-secondary block text-sm uppercase"
-        >
-          {label}
-        </label>
-      )}
+    <div>
+
+    <div className={`rounded-lg bg-white my-2 px-2 flex items-center text-${color} border border-${border}`}>
+      <FontAwesomeIcon icon={icon} className="mr-2" />
       <input
-        className="w-full py-2 px-4 my-1 rounded-sm bg-gray-200 border border-secondary"
+        className={`flex-1 w-full py-2 bg-white`}
         id={id}
         type={type}
         name={name}
         placeholder={placeholder}
         onChange={onChange}
         value={value}
-      />
+        onBlur={onBlur}
+        />
     </div>
+      {error && <p className="text-xs text-negative">{error}</p>}
+        </div>
   );
 }

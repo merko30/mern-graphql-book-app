@@ -193,10 +193,10 @@ export class BookResolver {
   }
 
   @Query(() => CountResponse)
-  async counts() {
-    const wishlist = await Book.countDocuments({ status: Status.wishlist });
-    const reading = await Book.countDocuments({ status: Status.reading });
-    const read = await Book.countDocuments({ status: Status.read });
+  async counts(@Ctx() {req}: Context) {
+    const wishlist = await Book.countDocuments({ user:req.user!._id,status: Status.wishlist });
+    const reading = await Book.countDocuments({ user:req.user!._id,status: Status.reading });
+    const read = await Book.countDocuments({ user:req.user!._id,status: Status.read });
 
     return {
       wishlist,

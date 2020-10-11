@@ -21,7 +21,7 @@ const IconWithLabel = ({
 }: IconWithLabelProps) => {
   return (
     <div className="mx-2">
-      <p className="uppercase tracking-wide text-sm text-secondary font-thin">
+      <p className="uppercase tracking-wide text-sm text-foreground font-thin">
         {topLabel}
       </p>
       <span className="flex items-center justify-center">
