@@ -38,7 +38,7 @@
     "eject": "react-scripts eject",
     "build:styles": "postcss src/tailwind.css -o src/styles.css",
     "watch:styles": "postcss src/tailwind.css -o src/styles.css -w",
-    "prebuild": "npm run build:styles",
+    "prebuild": "npm run build:styles && npm run generate",
     "prestart": "npm run build:styles",
     "generate": "graphql-codegen --config codegen.yml"
   },
