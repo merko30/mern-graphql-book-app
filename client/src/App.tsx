@@ -17,8 +17,7 @@ import { Navbar, Footer } from "./layout";
 import history from "./history";
 
 export const link = createHttpLink({
-  uri: "http://localhost:4000/graphql",
-  
+  uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => ({
@@ -34,7 +33,6 @@ export const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: authLink.concat(link),
   connectToDevTools: true,
-  
 });
 
 const App = () => (
