@@ -37,7 +37,7 @@ const Navbar = () => {
 
   return (
     <div className="container flex flex-col md:flex-row md:items-center justify-between pt-2 mb-5">
-      <Link to="/" className="flex-1">
+      <Link to="/dashboard" className="flex-1">
         <Logo size="xl" />
       </Link>
 
@@ -57,9 +57,6 @@ const Navbar = () => {
 
           <Search />
 
-          <NavItem show={loggedIn} to="/dashboard">
-            My books
-          </NavItem>
           <NavItem show={loggedIn} isButton={true} onClick={handleLogout}>
             Logout
           </NavItem>
