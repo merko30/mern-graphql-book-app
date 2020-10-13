@@ -56,8 +56,8 @@ const Search = () => {
         />
       </div>
       {searchActive && (
-        <div className="overflow-scroll h-64 bg-white border border-background_two rounded-lg shadow-lg absolute top-0 mt-16 left-0 z-10 w-full">
-          {loading && <Loading />}
+        <div className="overflow-scroll h-64 bg-white border border-background_two rounded-lg shadow-lg absolute top-0 mt-16 left-0 z-10 w-full flex flex-col">
+          {loading && <Loading className="m-auto" />}
           {error && <p>error</p>}
           {data &&
             data.search.length > 0 &&
@@ -67,7 +67,7 @@ const Search = () => {
                   key={book.id}
                   to={`/book/${book.id}`}
                   ref={menuRef}
-                  className="block flex border-b border-background_two p-2 hover:bg-background_two"
+                  className={`block flex border-b border-background_two p-2 hover:bg-background_two`}
                 >
                   <img
                     src={book.image_url}

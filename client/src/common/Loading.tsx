@@ -1,5 +1,9 @@
 import React from "react";
 
-export default function Loading() {
-  return <div className="spinner"></div>;
+interface LoadingProps {
+  className?: string;
+}
+
+export default function Loading({ className }: LoadingProps) {
+  return <div className={`spinner block ${className}`}></div>;
 }

@@ -44,7 +44,7 @@ const App = () => (
         <GuestRoute path="/register" component={Register} />
         <>
           <Navbar />
-          <div className="flex-1">
+          <div className="flex-1 h-full">
             <ProtectedRoute path="/dashboard" component={Dashboard} />
             <ProtectedRoute path="/lists/:listname" component={List} />
             <Route path="/book/:id" component={BookDetail} />

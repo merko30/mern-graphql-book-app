@@ -77,7 +77,7 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
   return (
     <>
       <span
-        className="absolute top-0 right-0 shadow-sm mr-6 mt-10 p-2 w-10 h-10 flex justify-center items-center bg-background_two cursor-pointer rounded-full inline-block"
+        className={`absolute top-0 right-0 shadow-sm p-2 w-10 h-10 flex justify-center items-center bg-background_two cursor-pointer rounded-full inline-block ${className}`}
         ref={iconRef}
         onClick={() => setMenuVisible((p) => !p)}
       >
@@ -86,7 +86,7 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
       {menuVisible && (
         <div
           ref={menuRef}
-          className={`absolute top-0 right-0 mr-16 mt-8 rounded shadow-md flex flex-col ${className}`}
+          className={`absolute top-0 right-0 mr-16 mt-8 rounded shadow-md flex flex-col`}
         >
           {loading ? (
             <Loading />

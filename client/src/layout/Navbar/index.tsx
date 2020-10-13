@@ -36,7 +36,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="container flex flex-col md:flex-row md:items-center justify-between pt-2 mb-10">
+    <div className="container flex flex-col md:flex-row md:items-center justify-between pt-2 mb-5">
       <Link to="/" className="flex-1">
         <Logo size="xl" />
       </Link>

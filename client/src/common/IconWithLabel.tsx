@@ -20,7 +20,7 @@ const IconWithLabel = ({
   labelColor: color,
 }: IconWithLabelProps) => {
   return (
-    <div className="mx-2">
+    <div className="mx-2 w-full text-center border-b border-background md:border-b-0 last:border-b-0">
       <p className="uppercase tracking-wide text-sm text-foreground font-thin">
         {topLabel}
       </p>
