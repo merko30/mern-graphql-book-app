@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import * as yup from "yup";
 
-import { TextInput, Button, Error, Loading } from "../common";
+import { TextInput, Button, Error, LoadingTwo } from "../common";
 import { AuthLayout } from "../layout";
 
 import { useRegisterMutation } from "../generated";
@@ -94,7 +94,7 @@ const Register = ({ history }: RouteComponentProps) => {
         />
 
         <Button type="submit" className="w-full">
-          {loading ? <Loading /> : "Sign up"}
+          {loading ? <LoadingTwo /> : "Sign up"}
         </Button>
       </form>
     </AuthLayout>

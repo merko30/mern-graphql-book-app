@@ -67,10 +67,10 @@ const BookDetail = ({
           </div>
         )}
         {data && data.getSingleBook && (
-          <div className="mx-auto grid grid-rows-auto  grid-cols-1 md:grid-cols-3">
+          <div className="mx-auto grid grid-rows-auto  grid-cols-1 md:grid-cols-3 py-3 justify-items-center">
             {/* <div className=" w-full md:w-1/3"> */}
             {data.getSingleBook.image_url && (
-              <div className="row-start-1 row-end-2">
+              <div className="row-start-1 row-end-2 my-2">
                 <img
                   className="object-contain"
                   src={data.getSingleBook.image_url}
