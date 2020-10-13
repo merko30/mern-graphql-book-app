@@ -57,7 +57,7 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.checkBook.status]);
 
-  const handleBodyClick = (e: MouseEvent) => {
+  const handleBodyClick = (e: MouseEvent | TouchEvent) => {
     if (menuRef.current) {
       if (
         !menuRef.current.contains(e.target as any) &&
@@ -70,29 +70,11 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
 
   useEffect(() => {
     window.addEventListener("click", handleBodyClick);
-    window.addEventListener("touchstart", (e) => {
-      if (menuRef.current) {
-        if (
-          !menuRef.current.contains(e.target as any) &&
-          !iconRef.current?.contains(e.target as any)
-        ) {
-          setMenuVisible(false);
-        }
-      }
-    });
+    window.addEventListener("touchstart", handleBodyClick);
 
     return () => {
       window.removeEventListener("click", handleBodyClick);
-      window.removeEventListener("touchstart", (e) => {
-        if (menuRef.current) {
-          if (
-            !menuRef.current.contains(e.target as any) &&
-            !iconRef.current?.contains(e.target as any)
-          ) {
-            setMenuVisible(false);
-          }
-        }
-      });
+      window.removeEventListener("touchstart", handleBodyClick);
     };
   }, []);
 
