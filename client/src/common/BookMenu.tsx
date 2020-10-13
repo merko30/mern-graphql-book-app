@@ -70,8 +70,30 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
 
   useEffect(() => {
     window.addEventListener("click", handleBodyClick);
+    window.addEventListener("touchstart", (e) => {
+      if (menuRef.current) {
+        if (
+          !menuRef.current.contains(e.target as any) &&
+          !iconRef.current?.contains(e.target as any)
+        ) {
+          setMenuVisible(false);
+        }
+      }
+    });
 
-    return () => window.removeEventListener("click", handleBodyClick);
+    return () => {
+      window.removeEventListener("click", handleBodyClick);
+      window.removeEventListener("touchstart", (e) => {
+        if (menuRef.current) {
+          if (
+            !menuRef.current.contains(e.target as any) &&
+            !iconRef.current?.contains(e.target as any)
+          ) {
+            setMenuVisible(false);
+          }
+        }
+      });
+    };
   }, []);
 
   return (
