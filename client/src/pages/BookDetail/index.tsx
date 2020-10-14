@@ -15,6 +15,11 @@ import {
   useAddOrUpdateBookMutation,
   useDeleteBookMutation,
   useGetSingleBookLazyQuery,
+  BooksDocument,
+  BooksQuery,
+  BooksQueryVariables,
+  CountsDocument,
+  // Book,
 } from "../../generated";
 
 import formatDate from "../../utils/formatDate";
@@ -38,11 +43,66 @@ const BookDetail = ({
     if (data?.getSingleBook) {
       const book = data.getSingleBook;
       if (status === "delete") {
-        deleteBook({ variables: { id: book.id.toString() } });
+        deleteBook({
+          variables: { id: book.id.toString() },
+          update: ({ readQuery, writeQuery }) => {
+            const data = readQuery<BooksQuery, BooksQueryVariables>({
+              query: BooksDocument,
+              variables: { input: {} },
+            });
+
+            if (data) {
+              writeQuery<BooksQuery, BooksQueryVariables>({
+                query: BooksDocument,
+                data: {
+                  ...data,
+                  books: {
+                    ...data.books,
+                    books: data.books.books.filter(
+                      (b) => b.id !== book.id.toString()
+                    ),
+                  },
+                },
+              });
+            }
+          },
+        });
       } else if (status === "info") {
-        history.push("/");
+        history.push(`/book/${book.id.toString()}`);
       } else {
         addOrUpdateBook({
+          refetchQueries: [{ query: CountsDocument }],
+          // update: (cache, { data }) => {
+          //   try {
+          //     const oldBooks = cache.readQuery<BooksQuery, BooksQueryVariables>(
+          //       { query: BooksDocument, variables: { input: {} } }
+          //     );
+          //     const oldCounts = client.readQuery<
+          //       CountsQuery,
+          //       CountsQueryVariables
+          //     >({
+          //       query: CountsDocument,
+          //     });
+          //     if (oldCounts && oldBooks && data) {
+          //       console.log(oldBooks.books.books);
+
+          //       client.writeQuery<CountsQuery, CountsQueryVariables>({
+          //         query: CountsDocument,
+          //         data: {
+          //           ...oldCounts,
+          //           counts: {
+          //             ...oldCounts.counts,
+
+          //             [data.addOrUpdateBook.status]:
+          //               oldCounts.counts[data.addOrUpdateBook.status] + 1,
+          //           },
+          //         },
+          //       });
+          //     }
+          //   } catch (err) {
+          //     return;
+          //   }
+          // },
           variables: {
             input: {
               title: book.title,

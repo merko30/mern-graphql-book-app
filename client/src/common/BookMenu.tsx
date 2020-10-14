@@ -99,7 +99,10 @@ const BookMenu = ({ book, className, onClick }: BookMenuProps) => {
               <span
                 key={status.value}
                 className="py-2 px-10 bg-white hover:bg-background_two cursor-pointer"
-                onClick={() => onClick(status.value as Status)}
+                onClick={() => {
+                  onClick(status.value as Status);
+                  setMenuVisible(false);
+                }}
               >
                 {status.label}
               </span>

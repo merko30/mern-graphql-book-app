@@ -147,11 +147,11 @@ export class GoodreadsBookDetails {
 @ObjectType()
 export class CountResponse {
   @Field(() => Number)
-  wishlist: number;
+  [Status.wishlist]: number;
 
   @Field(() => Number)
-  reading: number;
+  [Status.reading]: number;
 
   @Field(() => Number)
-  read: number;
+  [Status.read]: number;
 }
