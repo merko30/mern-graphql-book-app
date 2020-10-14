@@ -82,6 +82,22 @@ const BookDetail = ({
               });
               if (oldData && data) {
                 const { __typename, ...b } = data.addOrUpdateBook;
+                const {
+                  books: { books: booksArray },
+                } = oldData;
+
+                let newBooks = [];
+
+                const index = booksArray.findIndex(
+                  (b) => b.id === book.id.toString()
+                );
+
+                if (booksArray[index]) {
+                  booksArray[index].status = status;
+                  newBooks = booksArray;
+                } else {
+                  newBooks = [...booksArray, b];
+                }
 
                 client.writeQuery<BooksQuery, BooksQueryVariables>({
                   query: BooksDocument,
@@ -90,7 +106,7 @@ const BookDetail = ({
                     ...oldData,
                     books: {
                       ...oldData.books,
-                      books: [...oldData.books.books, b],
+                      books: newBooks,
                     },
                   },
                 });
