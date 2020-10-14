@@ -23,6 +23,7 @@ import {
 } from "../../generated";
 
 import formatDate from "../../utils/formatDate";
+import { useApolloClient } from "@apollo/client";
 
 const BookDetail = ({
   history,
@@ -33,6 +34,7 @@ const BookDetail = ({
   const [runQuery, { data, loading, error }] = useGetSingleBookLazyQuery();
   const [deleteBook] = useDeleteBookMutation();
   const [addOrUpdateBook] = useAddOrUpdateBookMutation();
+  const client = useApolloClient();
 
   useEffect(() => {
     runQuery({ variables: { id } });
@@ -72,37 +74,31 @@ const BookDetail = ({
       } else {
         addOrUpdateBook({
           refetchQueries: [{ query: CountsDocument }],
-          // update: (cache, { data }) => {
-          //   try {
-          //     const oldBooks = cache.readQuery<BooksQuery, BooksQueryVariables>(
-          //       { query: BooksDocument, variables: { input: {} } }
-          //     );
-          //     const oldCounts = client.readQuery<
-          //       CountsQuery,
-          //       CountsQueryVariables
-          //     >({
-          //       query: CountsDocument,
-          //     });
-          //     if (oldCounts && oldBooks && data) {
-          //       console.log(oldBooks.books.books);
+          update: (cache, { data }) => {
+            try {
+              const oldData = cache.readQuery<BooksQuery, BooksQueryVariables>({
+                query: BooksDocument,
+                variables: { input: {} },
+              });
+              if (oldData && data) {
+                const { __typename, ...b } = data.addOrUpdateBook;
 
-          //       client.writeQuery<CountsQuery, CountsQueryVariables>({
-          //         query: CountsDocument,
-          //         data: {
-          //           ...oldCounts,
-          //           counts: {
-          //             ...oldCounts.counts,
-
-          //             [data.addOrUpdateBook.status]:
-          //               oldCounts.counts[data.addOrUpdateBook.status] + 1,
-          //           },
-          //         },
-          //       });
-          //     }
-          //   } catch (err) {
-          //     return;
-          //   }
-          // },
+                client.writeQuery<BooksQuery, BooksQueryVariables>({
+                  query: BooksDocument,
+                  variables: { input: {} },
+                  data: {
+                    ...oldData,
+                    books: {
+                      ...oldData.books,
+                      books: [...oldData.books.books, b],
+                    },
+                  },
+                });
+              }
+            } catch (err) {
+              return;
+            }
+          },
           variables: {
             input: {
               title: book.title,
