@@ -82,27 +82,30 @@ export class Author {
 }
 
 @ObjectType()
-export class GoodreadsBook {
-  @Field(() => Number)
-  id: number;
-
+class VolumeInfo {
   @Field(() => String)
   title: string;
 
-  @Field(() => Number)
-  ratings_count: number;
-
-  @Field(() => Number)
-  average_rating: number;
-
-  @Field(() => Author)
-  author: Author;
-
   @Field(() => String)
-  image_url: string;
+  description: string;
 
+  @Field(() => [String])
+  authors: [string];
+
+  @Field(() => Number)
+  averageRating: number;
+
+  @Field(() => Number)
+  ratingsCount: Number;
+}
+
+@ObjectType()
+export class GoogleBook {
   @Field(() => String)
-  small_image_url: string;
+  id: string;
+
+  @Field(() => VolumeInfo)
+  volumeInfo: VolumeInfo;
 }
 
 @ObjectType()
@@ -134,8 +137,8 @@ export class GoodreadsBookDetails {
   @Field(() => String)
   small_image_url: string;
 
-  @Field(() => [GoodreadsBook])
-  similar_books: GoodreadsBook[];
+  @Field(() => [GoogleBook])
+  similar_books: GoogleBook[];
 
   @Field(() => String)
   publisher: string;

@@ -1,18 +1,6 @@
 import { FilterQuery } from "mongoose";
 import fetch from "node-fetch";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import xml2js from "xml2js";
-import parseISO from "date-fns/parseISO";
-
-const trimPhoto = (url: string) => {
-  if (!url.includes("nophoto")) {
-    let f = url.split(".").slice(-2, -1).join("");
-
-    return url.replace(`${f}.`, "");
-  } else {
-    return url;
-  }
-};
 
 import Book, { Book as BookI, Status } from "../models/book";
 
@@ -22,7 +10,7 @@ import {
   BooksResponse,
   Book as BookResponse,
   StatusResponse,
-  GoodreadsBook,
+  GoogleBook,
   GoodreadsBookDetails,
   CountResponse,
 } from "../types/book";
@@ -90,97 +78,24 @@ export class BookResolver {
   @Query(() => GoodreadsBookDetails)
   async getSingleBook(@Arg("id") id: string) {
     const response = await fetch(
-      `${process.env.GOODREADS_API_BASE_URL}/book/show/${id}?key=${process.env.GOODREADS_API_KEY}`,
-      { method: "GET" }
+      `${process.env.GOOGLE_BOOKS_API_BASE_URL}/${id}?key=${process.env.GOOGLE_BOOKS_API_KEY}`
     );
 
-    const xml = await response.text();
-
-    let book;
-
-    xml2js.parseString(
-      xml,
-      { trim: true, explicitArray: false, ignoreAttrs: true },
-      (err, data) => {
-        if (err) {
-          throw new Error("Something went wrong");
-        }
-
-        const response = data.GoodreadsResponse.book;
-
-        const addzero = (d: string) => (parseInt(d) < 10 ? `0${d}` : d);
-
-        if (
-          !response.publication_year ||
-          !response.publication_day ||
-          !response.publication_month
-        ) {
-          response.publication_date = null;
-        } else {
-          response.publication_date = parseISO(
-            `${response.publication_year}-${addzero(
-              response.publication_month
-            )}-${addzero(response.publication_day)}T11:30:30`
-          );
-        }
-
-        Object.entries(response.authors).map((t) => {
-          if (Array.isArray(t[1])) {
-            response.authors = [...t[1]];
-          } else {
-            response.authors = [t[1]];
-          }
-        });
-
-        response.image_url = trimPhoto(response.image_url);
-        response.small_image_url = trimPhoto(response.small_image_url);
-
-        // @ts-ignore
-        response.similar_books = response.similar_books.book.map((b) => ({
-          ...b,
-          image_url: trimPhoto(b.image_url),
-        }));
-
-        book = response;
-      }
-    );
+    const book = await response.json();
 
     return book;
   }
 
-  @Query(() => [GoodreadsBook])
+  @Query(() => [GoogleBook])
   async search(@Arg("term") term: string) {
     const response = await fetch(
-      `${process.env
-        .GOODREADS_API_BASE_URL!}/search/index.xml?&q=${term}&key=${process.env
-        .GOODREADS_API_KEY!}`,
-      { method: "GET" }
+      `${process.env.GOOGLE_BOOKS_API_BASE_URL!}/?q=${term}&key=${process.env
+        .GOOGLE_BOOKS_API_KEY!}`
     );
 
-    const xml = await response.text();
+    const results = await response.json();
 
-    let results;
-
-    xml2js.parseString(
-      xml,
-      { explicitArray: false, normalize: true, ignoreAttrs: true },
-      (err, data) => {
-        if (err) {
-          throw new Error("Something went wrong");
-        }
-        const response = data.GoodreadsResponse.search.results.work.map(
-          // @ts-ignore no-implicit-any
-          ({ best_book, ...rest }) => ({
-            ...rest,
-            ...best_book,
-          })
-        );
-
-        results = response;
-      }
-    );
-
-    return results;
+    return results.items;
   }
 
   @Mutation(() => BooleanResponse)
