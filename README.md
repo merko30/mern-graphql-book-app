@@ -10,4 +10,6 @@ Getting started
   * GOOGLE_BOOKS_API_KEY=google_api_key
   * GOOGLE_BOOKS_API_BASE_URL=https://www.googleapis.com/books/v1/volumes
 * Run `npm install` in root and client folder
-* Run `npm start` in root and client folder
+* Run `npm start` in root
+* Run `npm run generate` in client folder
+* Run `npm start` in client folder
