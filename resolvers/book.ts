@@ -11,7 +11,6 @@ import {
   Book as BookResponse,
   StatusResponse,
   GoogleBook,
-  GoodreadsBookDetails,
   CountResponse,
 } from "../types/book";
 
@@ -75,7 +74,7 @@ export class BookResolver {
     }
   }
 
-  @Query(() => GoodreadsBookDetails)
+  @Query(() => GoogleBook)
   async getSingleBook(@Arg("id") id: string) {
     const response = await fetch(
       `${process.env.GOOGLE_BOOKS_API_BASE_URL}/${id}?key=${process.env.GOOGLE_BOOKS_API_KEY}`

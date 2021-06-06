@@ -82,6 +82,22 @@ export class Author {
 }
 
 @ObjectType()
+class ImageLinks {
+  @Field(() => String, { nullable: true })
+  smallThumbnail: string;
+  @Field(() => String, { nullable: true })
+  thumbnail: string;
+  @Field(() => String, { nullable: true })
+  small: string;
+  @Field(() => String, { nullable: true })
+  medium: string;
+  @Field(() => String, { nullable: true })
+  large: string;
+  @Field(() => String, { nullable: true })
+  extraLarge: string;
+}
+
+@ObjectType()
 class VolumeInfo {
   @Field(() => String)
   title: string;
@@ -97,6 +113,24 @@ class VolumeInfo {
 
   @Field(() => Number)
   ratingsCount: Number;
+
+  @Field(() => String)
+  publisher: string;
+
+  @Field(() => String)
+  publishedDate: string;
+
+  @Field(() => Number)
+  pageCount: number;
+
+  @Field(() => String)
+  mainCategory: string;
+
+  @Field(() => [String])
+  categories: [string];
+
+  @Field(() => ImageLinks, { nullable: true })
+  imageLinks: ImageLinks;
 }
 
 @ObjectType()
@@ -106,45 +140,6 @@ export class GoogleBook {
 
   @Field(() => VolumeInfo)
   volumeInfo: VolumeInfo;
-}
-
-@ObjectType()
-export class GoodreadsBookDetails {
-  @Field(() => Number)
-  id: number;
-
-  @Field(() => Number)
-  ratings_count: number;
-
-  @Field(() => String)
-  title: string;
-
-  @Field(() => Number)
-  average_rating: number;
-
-  @Field(() => Number)
-  num_pages: number;
-
-  @Field(() => [Author])
-  authors: Author[];
-
-  @Field(() => String)
-  description: string;
-
-  @Field(() => String)
-  image_url: string;
-
-  @Field(() => String)
-  small_image_url: string;
-
-  @Field(() => [GoogleBook])
-  similar_books: GoogleBook[];
-
-  @Field(() => String)
-  publisher: string;
-
-  @Field(() => Date, { nullable: true })
-  publication_date?: Date;
 }
 
 @ObjectType()

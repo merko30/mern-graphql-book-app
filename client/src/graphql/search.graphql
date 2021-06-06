@@ -1,9 +1,12 @@
 query search($term: String!) {
   search(term: $term) {
     id
-    title
-    image_url
-    small_image_url
-    average_rating
+    volumeInfo {
+      title
+      description
+      averageRating
+      ratingsCount
+      authors
+    }
   }
 }

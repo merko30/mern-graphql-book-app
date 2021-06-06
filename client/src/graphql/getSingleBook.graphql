@@ -1,22 +1,12 @@
 query getSingleBook($id: String!) {
   getSingleBook(id: $id) {
     id
-    title
-    description
-    average_rating
-    image_url
-    num_pages
-    ratings_count
-    publication_date
-    publisher
-    authors {
-      id
-      name
-    }
-    similar_books {
-      id
+    volumeInfo {
       title
-      image_url
+      description
+      averageRating
+      ratingsCount
+      authors
     }
   }
 }

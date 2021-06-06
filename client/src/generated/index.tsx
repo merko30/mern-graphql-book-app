@@ -2,6 +2,9 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -9,9 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
 };
+
 
 export type AddOrUpdateBookInput = {
   id: Scalars['Float'];
@@ -61,32 +63,20 @@ export type CountResponse = {
   read: Scalars['Float'];
 };
 
-
-export type GoodreadsBook = {
-  __typename?: 'GoodreadsBook';
-  id: Scalars['Float'];
-  title: Scalars['String'];
-  ratings_count: Scalars['Float'];
-  average_rating: Scalars['Float'];
-  author: Author;
-  image_url: Scalars['String'];
-  small_image_url: Scalars['String'];
+export type GoogleBook = {
+  __typename?: 'GoogleBook';
+  id: Scalars['String'];
+  volumeInfo: VolumeInfo;
 };
 
-export type GoodreadsBookDetails = {
-  __typename?: 'GoodreadsBookDetails';
-  id: Scalars['Float'];
-  ratings_count: Scalars['Float'];
-  title: Scalars['String'];
-  average_rating: Scalars['Float'];
-  num_pages: Scalars['Float'];
-  authors: Array<Author>;
-  description: Scalars['String'];
-  image_url: Scalars['String'];
-  small_image_url: Scalars['String'];
-  similar_books: Array<GoodreadsBook>;
-  publisher: Scalars['String'];
-  publication_date?: Maybe<Scalars['DateTime']>;
+export type ImageLinks = {
+  __typename?: 'ImageLinks';
+  smallThumbnail?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<Scalars['String']>;
+  small?: Maybe<Scalars['String']>;
+  medium?: Maybe<Scalars['String']>;
+  large?: Maybe<Scalars['String']>;
+  extraLarge?: Maybe<Scalars['String']>;
 };
 
 export type LoginInput = {
@@ -133,8 +123,8 @@ export type Query = {
   me: User;
   books: BooksResponse;
   checkBook: StatusResponse;
-  getSingleBook: GoodreadsBookDetails;
-  search: Array<GoodreadsBook>;
+  getSingleBook: GoogleBook;
+  search: Array<GoogleBook>;
   counts: CountResponse;
 };
 
@@ -194,6 +184,21 @@ export type UserInput = {
   lastName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   about?: Maybe<Scalars['String']>;
+};
+
+export type VolumeInfo = {
+  __typename?: 'VolumeInfo';
+  title: Scalars['String'];
+  description: Scalars['String'];
+  authors: Array<Scalars['String']>;
+  averageRating: Scalars['Float'];
+  ratingsCount: Scalars['Float'];
+  publisher: Scalars['String'];
+  publishedDate: Scalars['String'];
+  pageCount: Scalars['Float'];
+  mainCategory: Scalars['String'];
+  categories: Array<Scalars['String']>;
+  imageLinks?: Maybe<ImageLinks>;
 };
 
 export type AddOrUpdateBookMutationVariables = Exact<{
@@ -271,15 +276,12 @@ export type GetSingleBookQueryVariables = Exact<{
 export type GetSingleBookQuery = (
   { __typename?: 'Query' }
   & { getSingleBook: (
-    { __typename?: 'GoodreadsBookDetails' }
-    & Pick<GoodreadsBookDetails, 'id' | 'title' | 'description' | 'average_rating' | 'image_url' | 'num_pages' | 'ratings_count' | 'publication_date' | 'publisher'>
-    & { authors: Array<(
-      { __typename?: 'Author' }
-      & Pick<Author, 'id' | 'name'>
-    )>, similar_books: Array<(
-      { __typename?: 'GoodreadsBook' }
-      & Pick<GoodreadsBook, 'id' | 'title' | 'image_url'>
-    )> }
+    { __typename?: 'GoogleBook' }
+    & Pick<GoogleBook, 'id'>
+    & { volumeInfo: (
+      { __typename?: 'VolumeInfo' }
+      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors'>
+    ) }
   ) }
 );
 
@@ -332,8 +334,12 @@ export type SearchQueryVariables = Exact<{
 export type SearchQuery = (
   { __typename?: 'Query' }
   & { search: Array<(
-    { __typename?: 'GoodreadsBook' }
-    & Pick<GoodreadsBook, 'id' | 'title' | 'image_url' | 'small_image_url' | 'average_rating'>
+    { __typename?: 'GoogleBook' }
+    & Pick<GoogleBook, 'id'>
+    & { volumeInfo: (
+      { __typename?: 'VolumeInfo' }
+      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors'>
+    ) }
   )> }
 );
 
@@ -370,7 +376,8 @@ export type AddOrUpdateBookMutationFn = Apollo.MutationFunction<AddOrUpdateBookM
  * });
  */
 export function useAddOrUpdateBookMutation(baseOptions?: Apollo.MutationHookOptions<AddOrUpdateBookMutation, AddOrUpdateBookMutationVariables>) {
-        return Apollo.useMutation<AddOrUpdateBookMutation, AddOrUpdateBookMutationVariables>(AddOrUpdateBookDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddOrUpdateBookMutation, AddOrUpdateBookMutationVariables>(AddOrUpdateBookDocument, options);
       }
 export type AddOrUpdateBookMutationHookResult = ReturnType<typeof useAddOrUpdateBookMutation>;
 export type AddOrUpdateBookMutationResult = Apollo.MutationResult<AddOrUpdateBookMutation>;
@@ -407,11 +414,13 @@ export const BooksDocument = gql`
  *   },
  * });
  */
-export function useBooksQuery(baseOptions?: Apollo.QueryHookOptions<BooksQuery, BooksQueryVariables>) {
-        return Apollo.useQuery<BooksQuery, BooksQueryVariables>(BooksDocument, baseOptions);
+export function useBooksQuery(baseOptions: Apollo.QueryHookOptions<BooksQuery, BooksQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BooksQuery, BooksQueryVariables>(BooksDocument, options);
       }
 export function useBooksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BooksQuery, BooksQueryVariables>) {
-          return Apollo.useLazyQuery<BooksQuery, BooksQueryVariables>(BooksDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BooksQuery, BooksQueryVariables>(BooksDocument, options);
         }
 export type BooksQueryHookResult = ReturnType<typeof useBooksQuery>;
 export type BooksLazyQueryHookResult = ReturnType<typeof useBooksLazyQuery>;
@@ -440,11 +449,13 @@ export const CheckBookDocument = gql`
  *   },
  * });
  */
-export function useCheckBookQuery(baseOptions?: Apollo.QueryHookOptions<CheckBookQuery, CheckBookQueryVariables>) {
-        return Apollo.useQuery<CheckBookQuery, CheckBookQueryVariables>(CheckBookDocument, baseOptions);
+export function useCheckBookQuery(baseOptions: Apollo.QueryHookOptions<CheckBookQuery, CheckBookQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckBookQuery, CheckBookQueryVariables>(CheckBookDocument, options);
       }
 export function useCheckBookLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckBookQuery, CheckBookQueryVariables>) {
-          return Apollo.useLazyQuery<CheckBookQuery, CheckBookQueryVariables>(CheckBookDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckBookQuery, CheckBookQueryVariables>(CheckBookDocument, options);
         }
 export type CheckBookQueryHookResult = ReturnType<typeof useCheckBookQuery>;
 export type CheckBookLazyQueryHookResult = ReturnType<typeof useCheckBookLazyQuery>;
@@ -475,10 +486,12 @@ export const CountsDocument = gql`
  * });
  */
 export function useCountsQuery(baseOptions?: Apollo.QueryHookOptions<CountsQuery, CountsQueryVariables>) {
-        return Apollo.useQuery<CountsQuery, CountsQueryVariables>(CountsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CountsQuery, CountsQueryVariables>(CountsDocument, options);
       }
 export function useCountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountsQuery, CountsQueryVariables>) {
-          return Apollo.useLazyQuery<CountsQuery, CountsQueryVariables>(CountsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CountsQuery, CountsQueryVariables>(CountsDocument, options);
         }
 export type CountsQueryHookResult = ReturnType<typeof useCountsQuery>;
 export type CountsLazyQueryHookResult = ReturnType<typeof useCountsLazyQuery>;
@@ -510,7 +523,8 @@ export type DeleteBookMutationFn = Apollo.MutationFunction<DeleteBookMutation, D
  * });
  */
 export function useDeleteBookMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBookMutation, DeleteBookMutationVariables>) {
-        return Apollo.useMutation<DeleteBookMutation, DeleteBookMutationVariables>(DeleteBookDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBookMutation, DeleteBookMutationVariables>(DeleteBookDocument, options);
       }
 export type DeleteBookMutationHookResult = ReturnType<typeof useDeleteBookMutation>;
 export type DeleteBookMutationResult = Apollo.MutationResult<DeleteBookMutation>;
@@ -519,22 +533,12 @@ export const GetSingleBookDocument = gql`
     query getSingleBook($id: String!) {
   getSingleBook(id: $id) {
     id
-    title
-    description
-    average_rating
-    image_url
-    num_pages
-    ratings_count
-    publication_date
-    publisher
-    authors {
-      id
-      name
-    }
-    similar_books {
-      id
+    volumeInfo {
       title
-      image_url
+      description
+      averageRating
+      ratingsCount
+      authors
     }
   }
 }
@@ -556,11 +560,13 @@ export const GetSingleBookDocument = gql`
  *   },
  * });
  */
-export function useGetSingleBookQuery(baseOptions?: Apollo.QueryHookOptions<GetSingleBookQuery, GetSingleBookQueryVariables>) {
-        return Apollo.useQuery<GetSingleBookQuery, GetSingleBookQueryVariables>(GetSingleBookDocument, baseOptions);
+export function useGetSingleBookQuery(baseOptions: Apollo.QueryHookOptions<GetSingleBookQuery, GetSingleBookQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSingleBookQuery, GetSingleBookQueryVariables>(GetSingleBookDocument, options);
       }
 export function useGetSingleBookLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSingleBookQuery, GetSingleBookQueryVariables>) {
-          return Apollo.useLazyQuery<GetSingleBookQuery, GetSingleBookQueryVariables>(GetSingleBookDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSingleBookQuery, GetSingleBookQueryVariables>(GetSingleBookDocument, options);
         }
 export type GetSingleBookQueryHookResult = ReturnType<typeof useGetSingleBookQuery>;
 export type GetSingleBookLazyQueryHookResult = ReturnType<typeof useGetSingleBookLazyQuery>;
@@ -597,7 +603,8 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * });
  */
 export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
       }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
@@ -628,10 +635,12 @@ export const MeDocument = gql`
  * });
  */
 export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
       }
 export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
         }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
@@ -663,7 +672,8 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  * });
  */
 export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
-        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
       }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
@@ -672,10 +682,13 @@ export const SearchDocument = gql`
     query search($term: String!) {
   search(term: $term) {
     id
-    title
-    image_url
-    small_image_url
-    average_rating
+    volumeInfo {
+      title
+      description
+      averageRating
+      ratingsCount
+      authors
+    }
   }
 }
     `;
@@ -696,11 +709,13 @@ export const SearchDocument = gql`
  *   },
  * });
  */
-export function useSearchQuery(baseOptions?: Apollo.QueryHookOptions<SearchQuery, SearchQueryVariables>) {
-        return Apollo.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, baseOptions);
+export function useSearchQuery(baseOptions: Apollo.QueryHookOptions<SearchQuery, SearchQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options);
       }
 export function useSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchQuery, SearchQueryVariables>) {
-          return Apollo.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options);
         }
 export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>;
 export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>;
