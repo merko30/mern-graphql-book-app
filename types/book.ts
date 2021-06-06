@@ -51,7 +51,7 @@ export class BooksResponse {
 @InputType()
 export class AddOrUpdateBookInput {
   @Field(() => Number)
-  id: number;
+  id: string;
 
   @Field(() => String)
   title: string;

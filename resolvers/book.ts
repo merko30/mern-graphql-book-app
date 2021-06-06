@@ -1,4 +1,4 @@
-import { MongooseFilterQuery } from "mongoose";
+import { FilterQuery } from "mongoose";
 import fetch from "node-fetch";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import xml2js from "xml2js";
@@ -37,10 +37,9 @@ export class BookResolver {
   async books(@Ctx() ctx: Context, @Arg("input") input: BooksInput) {
     const { perPage = 15, page = 1, status } = input;
 
-    const query: MongooseFilterQuery<Pick<
-      BookI,
-      "_id" | "title" | "authors" | "status" | "user" | "thumbnail"
-    >> = { user: ctx.req.user?._id };
+    const query: FilterQuery<
+      Pick<BookI, "_id" | "title" | "authors" | "status" | "user" | "thumbnail">
+    > = { user: ctx.req.user?._id };
 
     if (status) {
       query.status = status;
@@ -64,7 +63,7 @@ export class BookResolver {
     @Ctx() ctx: Context
   ) {
     const book = await Book.findOneAndUpdate(
-      { id: input.id },
+      { _id: input.id },
       { ...input, user: ctx.req.user?._id },
       { upsert: true, new: true }
     );
@@ -78,7 +77,7 @@ export class BookResolver {
     @Ctx() ctx: Context
   ): Promise<StatusResponse> {
     const book = await Book.findOne({
-      id,
+      _id: id,
       user: ctx.req.user!._id,
     });
     if (book) {
@@ -193,10 +192,19 @@ export class BookResolver {
   }
 
   @Query(() => CountResponse)
-  async counts(@Ctx() {req}: Context) {
-    const wishlist = await Book.countDocuments({ user:req.user!._id,status: Status.wishlist });
-    const reading = await Book.countDocuments({ user:req.user!._id,status: Status.reading });
-    const read = await Book.countDocuments({ user:req.user!._id,status: Status.read });
+  async counts(@Ctx() { req }: Context) {
+    const wishlist = await Book.countDocuments({
+      user: req.user!._id,
+      status: Status.wishlist,
+    });
+    const reading = await Book.countDocuments({
+      user: req.user!._id,
+      status: Status.reading,
+    });
+    const read = await Book.countDocuments({
+      user: req.user!._id,
+      status: Status.read,
+    });
 
     return {
       wishlist,

@@ -8,7 +8,7 @@ export interface UserI extends mongoose.Document {
   password: string;
 }
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema<UserI>({
   username: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
@@ -22,13 +22,13 @@ UserSchema.pre<UserI>("save", function (next) {
   next();
 });
 
-UserSchema.statics.createToken = function () {
+UserSchema.methods.createToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET!, {
     expiresIn: "1d",
   });
 };
 
-UserSchema.statics.isValidPassword = function (password: string) {
+UserSchema.methods.isValidPassword = function (password: string) {
   return bcrypt.compareSync(password, this.password);
 };
 
