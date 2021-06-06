@@ -8,7 +8,7 @@ import {
 
 import { Error, Loading, IconWithLabel, BookMenu } from "../../common";
 
-import BookSuggestions from "./components/BookSuggestions";
+// import BookSuggestions from "./components/BookSuggestions";
 
 import {
   Status,
@@ -24,6 +24,7 @@ import {
 
 import formatDate from "../../utils/formatDate";
 import { useApolloClient } from "@apollo/client";
+import getBookCover from "../../utils/getBookCover";
 
 const BookDetail = ({
   history,
@@ -32,6 +33,7 @@ const BookDetail = ({
   },
 }: RouteComponentProps<{ id: string }>) => {
   const [runQuery, { data, loading, error }] = useGetSingleBookLazyQuery();
+  const { getSingleBook } = data || {};
   const [deleteBook] = useDeleteBookMutation();
   const [addOrUpdateBook] = useAddOrUpdateBookMutation();
   const client = useApolloClient();
@@ -43,88 +45,96 @@ const BookDetail = ({
 
   const onMenuItemClick = (status: Status | "delete" | "info") => {
     if (data?.getSingleBook) {
-      const book = data.getSingleBook;
-      if (status === "delete") {
-        deleteBook({
-          variables: { id: book.id.toString() },
-          update: ({ readQuery, writeQuery }) => {
-            const data = readQuery<BooksQuery, BooksQueryVariables>({
-              query: BooksDocument,
-              variables: { input: {} },
-            });
-
-            if (data) {
-              writeQuery<BooksQuery, BooksQueryVariables>({
-                query: BooksDocument,
-                data: {
-                  ...data,
-                  books: {
-                    ...data.books,
-                    books: data.books.books.filter(
-                      (b) => b.id !== book.id.toString()
-                    ),
-                  },
-                },
-              });
-            }
-          },
-        });
-      } else if (status === "info") {
-        history.push(`/book/${book.id.toString()}`);
-      } else {
-        addOrUpdateBook({
-          refetchQueries: [{ query: CountsDocument }],
-          update: (cache, { data }) => {
-            try {
-              const oldData = cache.readQuery<BooksQuery, BooksQueryVariables>({
+      const book = getSingleBook;
+      if (book) {
+        if (status === "delete") {
+          deleteBook({
+            variables: { id: book.id.toString() },
+            update: ({ readQuery, writeQuery }) => {
+              const data = readQuery<BooksQuery, BooksQueryVariables>({
                 query: BooksDocument,
                 variables: { input: {} },
               });
-              if (oldData && data) {
-                const { __typename, ...b } = data.addOrUpdateBook;
-                const {
-                  books: { books: booksArray },
-                } = oldData;
 
-                let newBooks = [];
-
-                const index = booksArray.findIndex(
-                  (b) => b.id === book.id.toString()
-                );
-
-                if (booksArray[index]) {
-                  booksArray[index].status = status;
-                  newBooks = booksArray;
-                } else {
-                  newBooks = [...booksArray, b];
-                }
-
-                client.writeQuery<BooksQuery, BooksQueryVariables>({
+              if (data) {
+                writeQuery<BooksQuery, BooksQueryVariables>({
                   query: BooksDocument,
-                  variables: { input: {} },
                   data: {
-                    ...oldData,
+                    ...data,
                     books: {
-                      ...oldData.books,
-                      books: newBooks,
+                      ...data.books,
+                      books: data.books.books.filter(
+                        (b) => b.id !== book.id.toString()
+                      ),
                     },
                   },
                 });
               }
-            } catch (err) {
-              return;
-            }
-          },
-          variables: {
-            input: {
-              title: book.title,
-              thumbnail: book.image_url,
-              authors: book.authors.map((b) => b.name),
-              id: book.id,
-              status,
             },
-          },
-        });
+          });
+        } else if (status === "info") {
+          history.push(`/book/${book.id.toString()}`);
+        } else {
+          addOrUpdateBook({
+            refetchQueries: [{ query: CountsDocument }],
+            update: (cache, { data }) => {
+              try {
+                const oldData = cache.readQuery<
+                  BooksQuery,
+                  BooksQueryVariables
+                >({
+                  query: BooksDocument,
+                  variables: { input: {} },
+                });
+                if (oldData && data) {
+                  const {
+                    books: { books: booksArray },
+                  } = oldData;
+
+                  let newBooks = [];
+
+                  const index = booksArray.findIndex(
+                    (b) => b.id === book.id.toString()
+                  );
+
+                  let {
+                    addOrUpdateBook: { __typename, ...newBook },
+                  } = data;
+
+                  if (booksArray[index]) {
+                    booksArray[index].status = status;
+                    newBooks = booksArray;
+                  } else {
+                    newBooks = [...booksArray, newBook];
+                  }
+
+                  client.writeQuery<BooksQuery, BooksQueryVariables>({
+                    query: BooksDocument,
+                    variables: { input: {} },
+                    data: {
+                      ...oldData,
+                      books: {
+                        ...oldData.books,
+                        books: newBooks,
+                      },
+                    },
+                  });
+                }
+              } catch (err) {
+                return;
+              }
+            },
+            variables: {
+              input: {
+                title: book.volumeInfo.title,
+                thumbnail: getBookCover(book.volumeInfo.imageLinks),
+                authors: book.volumeInfo.authors,
+                id: book.id,
+                status,
+              },
+            },
+          });
+        }
       }
     }
   };
@@ -138,20 +148,18 @@ const BookDetail = ({
             <Loading />
           </div>
         )}
-        {data && data.getSingleBook && (
+        {getSingleBook && (
           <div className="mx-auto grid grid-rows-auto  grid-cols-1 md:grid-cols-3 py-3 justify-items-center">
             {/* <div className=" w-full md:w-1/3"> */}
-            {data.getSingleBook.image_url && (
-              <div className="row-start-1 row-end-2 my-2">
-                <img
-                  className="object-contain"
-                  src={data.getSingleBook.image_url}
-                  alt={data.getSingleBook.title}
-                />
-              </div>
-            )}
+            <div className="row-start-1 row-end-2 my-2">
+              <img
+                className="object-contain"
+                src={getBookCover(getSingleBook.volumeInfo.imageLinks)}
+                alt={getSingleBook.volumeInfo.title}
+              />
+            </div>
 
-            <BookSuggestions books={data.getSingleBook.similar_books} />
+            {/* <BookSuggestions books={getSingleBook.similar_books} /> */}
             {/* </div> */}
 
             <div className="md:ml-4 row-start-2 row-end-3 md:row-start-1 md:row-end-3 md:col-start-2 md:col-end-4 relative">
@@ -159,46 +167,47 @@ const BookDetail = ({
                 onClick={onMenuItemClick}
                 className="mr-0 mt-2"
                 book={{
-                  title: data.getSingleBook.title,
-                  id: data.getSingleBook.id,
-                  authors: data.getSingleBook.authors.map((a) => a.name),
-                  thumbnail: data.getSingleBook.image_url,
+                  title: getSingleBook.volumeInfo.title,
+                  id: getSingleBook.id,
+                  authors: getSingleBook.volumeInfo.authors,
+                  thumbnail: getBookCover(getSingleBook.volumeInfo.imageLinks),
                 }}
               />
               <h1 className="text-xl md:text-2xl pr-6">
-                {data.getSingleBook.title}
+                {getSingleBook.volumeInfo.title}
               </h1>
-              {data.getSingleBook.authors &&
-                data.getSingleBook.authors.map((a, i) => {
-                  const last = data.getSingleBook.authors.length - 1 === i;
+              {getSingleBook.volumeInfo.authors &&
+                getSingleBook.volumeInfo.authors.map((a, i) => {
+                  const last =
+                    getSingleBook.volumeInfo.authors.length - 1 === i;
                   return (
-                    <h2 key={a.id} className="text-md inline-block">
-                      {a.name}
+                    <h2 key={a} className="text-md inline-block">
+                      {a}
                       {!last ? "\u00A0|\u00A0" : "\u00A0"}
                     </h2>
                   );
                 })}
 
               <div className="flex flex-col md:flex-row items-center my-2 bg-background_two p-2 rounded justify-evenly">
-                {data.getSingleBook.average_rating && (
+                {getSingleBook.volumeInfo.averageRating && (
                   <IconWithLabel
                     topLabel="average rating"
                     icon={faStar}
                     iconColor="gold"
-                    label={data.getSingleBook.average_rating}
+                    label={getSingleBook.volumeInfo.averageRating}
                   />
                 )}
                 <IconWithLabel
                   topLabel="pages"
-                  label={`${data.getSingleBook.num_pages}`}
+                  label={`${getSingleBook.volumeInfo.pageCount}`}
                   iconColor="gray"
                   icon={faBookOpen}
                 />
 
-                {data.getSingleBook.publication_date && (
+                {getSingleBook.volumeInfo.publishedDate && (
                   <IconWithLabel
                     topLabel="published at"
-                    label={formatDate(data.getSingleBook.publication_date)}
+                    label={formatDate(getSingleBook.volumeInfo.publishedDate)}
                     iconColor="gray"
                     icon={faCalendarDay}
                   />
@@ -207,7 +216,7 @@ const BookDetail = ({
               <p
                 className="text-sm text-gray-800 mt-4"
                 dangerouslySetInnerHTML={{
-                  __html: data.getSingleBook.description,
+                  __html: getSingleBook.volumeInfo.description,
                 }}
               />
             </div>

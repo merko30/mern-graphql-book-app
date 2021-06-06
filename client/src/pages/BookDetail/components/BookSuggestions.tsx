@@ -6,10 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { GoodreadsBook } from "../../../generated";
+import { GoogleBook } from "../../../generated";
+import getBookCover from "../../../utils/getBookCover";
 
 interface BookSuggestionsProps {
-  books: Partial<GoodreadsBook>[];
+  books: Partial<GoogleBook>[];
 }
 
 const BookSuggestions = ({ books }: BookSuggestionsProps) => {
@@ -45,7 +46,7 @@ const BookSuggestions = ({ books }: BookSuggestionsProps) => {
         />
         <Link to={`/book/${books[active].id}`}>
           <img
-            src={books[active].image_url}
+            src={getBookCover(books[active].volumeInfo?.imageLinks || null)}
             alt="book poster"
             className="object-contain rounded-md"
             style={{ height: "250px" }}

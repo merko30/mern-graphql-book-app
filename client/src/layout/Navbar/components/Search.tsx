@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Loading from "../../../common/Loading";
 
 import { useSearchLazyQuery } from "../../../generated";
+import getBookCover from "../../../utils/getBookCover";
 
 const Search = () => {
   const [term, setTerm] = useState("");
@@ -70,11 +71,11 @@ const Search = () => {
                   className={`block flex border-b border-background_two p-2 hover:bg-background_two`}
                 >
                   <img
-                    src={book.image_url}
+                    src={getBookCover(book.volumeInfo.imageLinks ?? null)}
                     alt="book poster"
                     className="object-contain w-12 mr-2"
                   />
-                  <h1 className="text-md font-bold">{book.title}</h1>
+                  <h1 className="text-md font-bold">{book.volumeInfo.title}</h1>
                 </Link>
               );
             })}

@@ -50,7 +50,7 @@ export class BooksResponse {
 
 @InputType()
 export class AddOrUpdateBookInput {
-  @Field(() => Number)
+  @Field(() => String)
   id: string;
 
   @Field(() => String)
@@ -84,17 +84,17 @@ export class Author {
 @ObjectType()
 class ImageLinks {
   @Field(() => String, { nullable: true })
-  smallThumbnail: string;
+  smallThumbnail?: string;
   @Field(() => String, { nullable: true })
-  thumbnail: string;
+  thumbnail?: string;
   @Field(() => String, { nullable: true })
-  small: string;
+  small?: string;
   @Field(() => String, { nullable: true })
-  medium: string;
+  medium?: string;
   @Field(() => String, { nullable: true })
-  large: string;
+  large?: string;
   @Field(() => String, { nullable: true })
-  extraLarge: string;
+  extraLarge?: string;
 }
 
 @ObjectType()

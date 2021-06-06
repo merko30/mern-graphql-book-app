@@ -7,6 +7,19 @@ query getSingleBook($id: String!) {
       averageRating
       ratingsCount
       authors
+      imageLinks {
+        smallThumbnail
+        thumbnail
+        small
+        medium
+        large
+        extraLarge
+      }
+      pageCount
+      publisher
+      publishedDate
+      mainCategory
+      categories
     }
   }
 }

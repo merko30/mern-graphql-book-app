@@ -16,7 +16,7 @@ export type Scalars = {
 
 
 export type AddOrUpdateBookInput = {
-  id: Scalars['Float'];
+  id: Scalars['String'];
   title: Scalars['String'];
   status: Status;
   authors: Array<Scalars['String']>;
@@ -280,7 +280,11 @@ export type GetSingleBookQuery = (
     & Pick<GoogleBook, 'id'>
     & { volumeInfo: (
       { __typename?: 'VolumeInfo' }
-      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors'>
+      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors' | 'pageCount' | 'publisher' | 'publishedDate' | 'mainCategory' | 'categories'>
+      & { imageLinks?: Maybe<(
+        { __typename?: 'ImageLinks' }
+        & Pick<ImageLinks, 'smallThumbnail' | 'thumbnail' | 'small' | 'medium' | 'large' | 'extraLarge'>
+      )> }
     ) }
   ) }
 );
@@ -338,7 +342,11 @@ export type SearchQuery = (
     & Pick<GoogleBook, 'id'>
     & { volumeInfo: (
       { __typename?: 'VolumeInfo' }
-      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors'>
+      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors' | 'pageCount' | 'publisher' | 'publishedDate' | 'mainCategory' | 'categories'>
+      & { imageLinks?: Maybe<(
+        { __typename?: 'ImageLinks' }
+        & Pick<ImageLinks, 'smallThumbnail' | 'thumbnail' | 'small' | 'medium' | 'large' | 'extraLarge'>
+      )> }
     ) }
   )> }
 );
@@ -539,6 +547,19 @@ export const GetSingleBookDocument = gql`
       averageRating
       ratingsCount
       authors
+      imageLinks {
+        smallThumbnail
+        thumbnail
+        small
+        medium
+        large
+        extraLarge
+      }
+      pageCount
+      publisher
+      publishedDate
+      mainCategory
+      categories
     }
   }
 }
@@ -688,6 +709,19 @@ export const SearchDocument = gql`
       averageRating
       ratingsCount
       authors
+      imageLinks {
+        smallThumbnail
+        thumbnail
+        small
+        medium
+        large
+        extraLarge
+      }
+      pageCount
+      publisher
+      publishedDate
+      mainCategory
+      categories
     }
   }
 }
