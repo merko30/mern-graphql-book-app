@@ -1,5 +1,4 @@
 import { FilterQuery } from "mongoose";
-import fetch from "node-fetch";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 
 import Book, { Book as BookI, Status } from "../models/book";
@@ -18,11 +17,25 @@ import Context from "../types/context";
 
 import { BooleanResponse } from "../types/user";
 
+interface GoogleResponse {
+  items: Array<any>;
+}
+
 @Resolver()
 export class BookResolver {
   @Query((_) => BooksResponse)
-  async books(@Ctx() ctx: Context, @Arg("input") input: BooksInput) {
-    const { perPage = 15, page = 1, status } = input;
+  async books(
+    @Ctx() ctx: Context,
+    @Arg("input", {
+      validate: false,
+      defaultValue: {
+        perPage: 15,
+        page: 1,
+      },
+    })
+    input?: BooksInput
+  ) {
+    const { perPage, page, status } = input!;
 
     const query: FilterQuery<
       Pick<BookI, "_id" | "title" | "authors" | "status" | "user" | "thumbnail">
@@ -32,14 +45,14 @@ export class BookResolver {
       query.status = status;
     }
 
-    const limit = perPage;
-    const skip = page * perPage - perPage;
+    const limit = perPage!;
+    const skip = page! * perPage! - perPage!;
 
     const count = await Book.countDocuments({ user: ctx.req.user?._id });
-    const books = await Book.find(query).skip(skip).limit(limit);
+    const books = await Book.find(query).skip(skip).limit(limit!);
 
     return {
-      totalPages: Math.ceil(count / perPage),
+      totalPages: Math.ceil(count / perPage!),
       books,
     };
   }
@@ -92,7 +105,7 @@ export class BookResolver {
         .GOOGLE_BOOKS_API_KEY!}`
     );
 
-    const results = await response.json();
+    const results = (await response.json()) as GoogleResponse;
 
     return results.items;
   }
