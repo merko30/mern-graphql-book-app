@@ -1,7 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import Loading from "../common/Loading";
+import { useEffect, useRef, useState } from "react";
 
-import { AddOrUpdateBookInput, useCheckBookQuery, Status } from "../generated";
+import Loading from "common/Loading";
+
+import {
+  AddOrUpdateBookInput,
+  useCheckBookQuery,
+  Status,
+} from "generated/index";
 
 interface MenuItem {
   value: string;

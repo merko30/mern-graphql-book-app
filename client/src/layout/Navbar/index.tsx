@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useApolloClient } from "@apollo/client";
 
 import NavItem from "./components/NavItem";
-import Logo from "../../common/Logo";
+import Logo from "common/Logo";
 import MenuButton from "./components/MenuButton";
 import Search from "./components/Search";
 
-import { useMeQuery } from "../../generated";
+import { useMeQuery } from "generated/index";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);

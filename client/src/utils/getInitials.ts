@@ -1,8 +1,8 @@
-const getInitials = (name: string) => {
+const getInitials = (name: string): string => {
   const [lastName, ...rest] = name.split(" ").reverse();
 
-  const initials = rest.reverse().map((name) => {
-    return name.slice(0, 1) + ".";
+  const initials = rest.reverse().map((segment) => {
+    return segment.slice(0, 1) + ".";
   });
 
   return initials.join("") + lastName;

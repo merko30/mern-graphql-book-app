@@ -1,9 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-import useAuth from "../auth/useAuth";
+import useAuth from "auth/useAuth";
 
-import Logo from "../common/Logo";
+import Logo from "common/Logo";
 
 const Home = () => {
   const { loggedIn, loading } = useAuth();

@@ -1,5 +1,3 @@
-import React from "react";
-
 interface LogoProps {
   size: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
 }

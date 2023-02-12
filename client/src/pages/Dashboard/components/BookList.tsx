@@ -1,9 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-import BookItem from "./BookItem";
+import { Book, Status } from "generated/index";
 
-import { Book, Status } from "../../../generated";
+import BookItem from "./BookItem";
 
 interface BookListProps {
   books: Omit<Book, "user">[];

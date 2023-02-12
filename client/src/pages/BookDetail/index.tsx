@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useApolloClient } from "@apollo/client";
 import {
   faBookOpen,
   faCalendarDay,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Error, Loading, IconWithLabel, BookMenu } from "../../common";
+import { Error, Loading, IconWithLabel, BookMenu } from "common/index";
 
 // import BookSuggestions from "./components/BookSuggestions";
 
@@ -19,12 +21,10 @@ import {
   BooksQueryVariables,
   CountsDocument,
   // Book,
-} from "../../generated";
+} from "generated/index";
 
-import formatDate from "../../utils/formatDate";
-import { useApolloClient } from "@apollo/client";
-import getBookCover from "../../utils/getBookCover";
-import { useNavigate, useParams } from "react-router-dom";
+import formatDate from "utils/formatDate";
+import getBookCover from "utils/getBookCover";
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -96,7 +96,7 @@ const BookDetail = () => {
                     (b) => b.id === book.id.toString()
                   );
 
-                  let {
+                  const {
                     addOrUpdateBook: { __typename, ...newBook },
                   } = data;
 

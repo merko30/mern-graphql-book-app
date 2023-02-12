@@ -1,14 +1,14 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import * as yup from "yup";
 
-import { TextInput, Button, Error, LoadingTwo } from "../common";
-import { AuthLayout } from "../layout";
+import { TextInput, Button, Error, LoadingTwo } from "common/index";
 
-import { useRegisterMutation } from "../generated";
-import { useNavigate } from "react-router-dom";
+import { AuthLayout } from "layout/index";
+
+import { useRegisterMutation } from "generated/index";
 
 interface FormData {
   username: string;

@@ -1,15 +1,14 @@
-import React from "react";
-// import { RouteProps } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import * as yup from "yup";
 
-import { TextInput, Button, Error, LoadingTwo } from "../common";
-import { AuthLayout } from "../layout";
+import { TextInput, Button, Error, LoadingTwo } from "common/index";
 
-import { useLoginMutation, MeDocument, MeQuery } from "../generated";
-import { useNavigate } from "react-router-dom";
+import { AuthLayout } from "layout/index";
+
+import { useLoginMutation, MeDocument, MeQuery } from "generated/index";
 
 interface FormData {
   emailOrUsername: string;

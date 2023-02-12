@@ -1,8 +1,8 @@
+import { ChangeEvent, InputHTMLAttributes } from "react";
 import {
   FontAwesomeIcon,
   FontAwesomeIconProps,
 } from "@fortawesome/react-fontawesome";
-import React, { ChangeEvent, InputHTMLAttributes } from "react";
 
 interface TextInputProps {
   name: string;

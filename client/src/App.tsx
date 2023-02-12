@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   ApolloProvider,
@@ -12,7 +11,7 @@ import {
 
 import { Home, Login, Register, Dashboard, BookDetail, List } from "./pages";
 
-import Layout from "./layout/Layout";
+import Layout from "layout/Layout";
 
 export const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:4000/graphql",

@@ -1,6 +1,4 @@
-import React from "react";
-
-import { Book as BookI } from "../../../generated";
+import { Book as BookI } from "generated/index";
 
 import Book from "./Book";
 

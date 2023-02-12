@@ -9,7 +9,7 @@ interface ImageLinks {
   extraLarge?: Maybe<string>;
 }
 
-const getBookCover = (imageLinks: ImageLinks | null | undefined) => {
+const getBookCover = (imageLinks: ImageLinks | null | undefined): string => {
   if (imageLinks) {
     return Object.values(imageLinks)[0];
   }

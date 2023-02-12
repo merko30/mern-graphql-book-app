@@ -1,4 +1,4 @@
-import { useMeQuery } from "../generated";
+import { useMeQuery } from "generated/index";
 
 const useAuth = () => {
   const { data, loading } = useMeQuery();

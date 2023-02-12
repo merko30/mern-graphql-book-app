@@ -1,8 +1,8 @@
-const capitalize = word => {
+const capitalize = (word: string): string => {
   if (word.split(" ").length > 1) {
     return word
       .split(" ")
-      .map(w => `${w[0].toUpperCase()}${w.slice(1).toLowerCase()}`)
+      .map((w) => `${w[0].toUpperCase()}${w.slice(1).toLowerCase()}`)
       .join(" ");
   }
 

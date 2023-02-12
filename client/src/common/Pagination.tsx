@@ -1,5 +1,3 @@
-import React from "react";
-
 interface PaginationProps {
   pagesCount: number;
   onClick: (page: number) => void;
@@ -7,7 +5,7 @@ interface PaginationProps {
 }
 
 const Pagination = ({ pagesCount, onClick, active }: PaginationProps) => {
-  let pages = Array(pagesCount).fill(1);
+  const pages = Array(pagesCount).fill(1);
 
   return (
     <div className="w-full flex justify-center my-2">

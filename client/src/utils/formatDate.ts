@@ -1,4 +1,4 @@
-const formatDate = (date: string) => {
+const formatDate = (date: string): string => {
   const dateObject = new Date(date);
 
   const months = [

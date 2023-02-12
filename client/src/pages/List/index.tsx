@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-import Pagination from "../../common/Pagination";
+import Pagination from "common/Pagination";
+import Loading from "common/Loading";
+import Error from "common/Error";
 
-import Loading from "../../common/Loading";
-import Error from "../../common/Error";
-import { Status, useBooksQuery } from "../../generated";
+import capitalize from "utils/capitalize";
+
+import { Status, useBooksQuery } from "generated/index";
 
 import BookList from "./components/BookList";
-
-import capitalize from "../../utils/capitalize";
-import { useParams } from "react-router-dom";
 
 const List = () => {
   const { listname } = useParams();
@@ -33,9 +33,11 @@ const List = () => {
     return (
       <div className="container h-full w-full md:w-2/3 my-5">
         {error && <Error error={error.message} />}
-        <h1 className="text-2xl my-4 tracking-wider uppercase text-foreground">
-          {capitalize(listname)}
-        </h1>
+        {listname && (
+          <h1 className="text-2xl my-4 tracking-wider uppercase text-foreground">
+            {capitalize(listname)}
+          </h1>
+        )}
         <BookList books={data.books.books} />
         {data.books.totalPages > 1 && (
           <Pagination

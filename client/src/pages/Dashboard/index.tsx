@@ -1,10 +1,9 @@
-import React from "react";
-import Loading from "../../common/Loading";
-import Error from "../../common/Error";
+import Loading from "common/Loading";
+import Error from "common/Error";
+
+import { Status, useBooksQuery, useCountsQuery } from "generated/index";
 
 import BookList from "./components/BookList";
-
-import { Status, useBooksQuery, useCountsQuery } from "../../generated";
 
 const Dashboard = () => {
   const { data, loading, error } = useBooksQuery({ variables: { input: {} } });

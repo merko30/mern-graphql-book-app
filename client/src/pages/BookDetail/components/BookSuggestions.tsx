@@ -1,13 +1,14 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
-import { GoogleBook } from "../../../generated";
-import getBookCover from "../../../utils/getBookCover";
+import { GoogleBook } from "generated/index";
+
+import getBookCover from "utils/getBookCover";
 
 interface BookSuggestionsProps {
   books: Partial<GoogleBook>[];

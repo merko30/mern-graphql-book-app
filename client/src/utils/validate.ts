@@ -1,7 +1,7 @@
 import capitalize from "./capitalize";
 
-export function validate(data) {
-  let errors = {};
+export function validate(data: Record<string, string>): Record<string, string> {
+  let errors: Record<string, string> = {};
   Object.entries(data).forEach(([key, value]) => {
     if (value === "") {
       errors[key] = "Can not be blank";
@@ -16,7 +16,8 @@ export function validate(data) {
   return errors;
 }
 
-function validateEmail(email) {
-  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+function validateEmail(email: string) {
+  var re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }

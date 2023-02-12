@@ -5,7 +5,7 @@
 //   RouteComponentProps,
 // } from "react-router-dom";
 
-// import useAuth from "../auth/useAuth";
+// import useAuth from "auth/useAuth";
 
 // interface ProtectedRouteProps extends RouteProps {
 //   component:
