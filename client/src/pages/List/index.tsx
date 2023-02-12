@@ -4,23 +4,20 @@ import Pagination from "../../common/Pagination";
 
 import Loading from "../../common/Loading";
 import Error from "../../common/Error";
-import { RouteComponentProps } from "react-router-dom";
 import { Status, useBooksQuery } from "../../generated";
 
 import BookList from "./components/BookList";
 
 import capitalize from "../../utils/capitalize";
+import { useParams } from "react-router-dom";
 
-const List = ({
-  match: {
-    params: { listname },
-  },
-}: RouteComponentProps<{ listname: Status }>) => {
+const List = () => {
+  const { listname } = useParams();
   const [page, setPage] = useState(1);
   const { data, loading, error, refetch } = useBooksQuery({
     variables: {
       input: {
-        status: listname,
+        status: listname as Status,
         page,
         perPage: 10,
       },
@@ -28,8 +25,7 @@ const List = ({
   });
 
   useEffect(() => {
-    refetch({ input: { status: listname, perPage: 10, page } });
-
+    refetch({ input: { status: listname as Status, perPage: 10, page } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 

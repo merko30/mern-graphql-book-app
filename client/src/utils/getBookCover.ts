@@ -1,4 +1,4 @@
-import Maybe from "graphql/tsutils/Maybe";
+import { Maybe } from "graphql/jsutils/Maybe";
 
 interface ImageLinks {
   smallThumbnail?: Maybe<string>;

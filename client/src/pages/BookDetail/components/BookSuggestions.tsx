@@ -46,7 +46,7 @@ const BookSuggestions = ({ books }: BookSuggestionsProps) => {
         />
         <Link to={`/book/${books[active].id}`}>
           <img
-            src={getBookCover(books[active].volumeInfo?.imageLinks || null)}
+            src={getBookCover(books[active].volumeInfo?.imageLinks)}
             alt="book poster"
             className="object-contain rounded-md"
             style={{ height: "250px" }}

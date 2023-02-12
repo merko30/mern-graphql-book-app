@@ -1,5 +1,4 @@
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +8,7 @@ import { TextInput, Button, Error, LoadingTwo } from "../common";
 import { AuthLayout } from "../layout";
 
 import { useRegisterMutation } from "../generated";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
   username: string;
@@ -28,16 +28,22 @@ const schema = yup.object().shape({
     .min(8, "Password should have at least 8 characters"),
 });
 
-const Register = ({ history }: RouteComponentProps) => {
-  const { handleSubmit, errors, control } = useForm<FormData>({
+const Register = () => {
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<FormData>({
     shouldUnregister: false,
     resolver: yupResolver(schema),
     reValidateMode: "onSubmit",
     mode: "onTouched",
   });
 
+  const navigate = useNavigate();
+
   const [registerMutation, { error, loading }] = useRegisterMutation({
-    onCompleted: () => history.push("/login"),
+    onCompleted: () => navigate("/login"),
   });
 
   return (
@@ -60,7 +66,7 @@ const Register = ({ history }: RouteComponentProps) => {
             <TextInput
               error={errors.username?.message}
               icon={faUser}
-              {...props}
+              {...props.field}
               placeholder="Username"
             />
           )}
@@ -73,7 +79,7 @@ const Register = ({ history }: RouteComponentProps) => {
             <TextInput
               error={errors.email?.message}
               icon={faEnvelope}
-              {...props}
+              {...props.field}
               placeholder="Email"
             />
           )}
@@ -87,7 +93,7 @@ const Register = ({ history }: RouteComponentProps) => {
               error={errors.password?.message}
               icon={faKey}
               type="password"
-              {...props}
+              {...props.field}
               placeholder="Password"
             />
           )}

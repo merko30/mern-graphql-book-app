@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
+// import { RouteProps } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,7 @@ import { TextInput, Button, Error, LoadingTwo } from "../common";
 import { AuthLayout } from "../layout";
 
 import { useLoginMutation, MeDocument, MeQuery } from "../generated";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
   emailOrUsername: string;
@@ -20,17 +21,23 @@ const schema = yup.object().shape({
   password: yup.string().required("Password is required"),
 });
 
-const Login = ({ history }: RouteComponentProps) => {
-  const { handleSubmit, errors, control } = useForm<FormData>({
+const Login = () => {
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
     reValidateMode: "onSubmit",
     mode: "onTouched",
   });
 
+  const navigate = useNavigate();
+
   const [loginMutation, { error, loading }] = useLoginMutation({
     onCompleted: (data) => {
       localStorage.setItem("token", `Bearer ${data.login.token}`);
-      history.push("/");
+      navigate("/");
     },
     update: (cache, { data }) => {
       if (data) {
@@ -63,7 +70,7 @@ const Login = ({ history }: RouteComponentProps) => {
           name="emailOrUsername"
           render={(props) => (
             <TextInput
-              {...props}
+              {...props.field}
               icon={faUser}
               placeholder="Email or username"
               error={errors.emailOrUsername?.message}
@@ -77,7 +84,7 @@ const Login = ({ history }: RouteComponentProps) => {
           defaultValue=""
           render={(props) => (
             <TextInput
-              {...props}
+              {...props.field}
               type="password"
               icon={faKey}
               placeholder="Password"

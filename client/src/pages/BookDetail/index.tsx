@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
 import {
   faBookOpen,
   faCalendarDay,
@@ -25,13 +24,11 @@ import {
 import formatDate from "../../utils/formatDate";
 import { useApolloClient } from "@apollo/client";
 import getBookCover from "../../utils/getBookCover";
+import { useNavigate, useParams } from "react-router-dom";
 
-const BookDetail = ({
-  history,
-  match: {
-    params: { id },
-  },
-}: RouteComponentProps<{ id: string }>) => {
+const BookDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [runQuery, { data, loading, error }] = useGetSingleBookLazyQuery();
   const { getSingleBook } = data || {};
   const [deleteBook] = useDeleteBookMutation();
@@ -39,7 +36,9 @@ const BookDetail = ({
   const client = useApolloClient();
 
   useEffect(() => {
-    runQuery({ variables: { id } });
+    if (id) {
+      runQuery({ variables: { id } });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -73,7 +72,7 @@ const BookDetail = ({
             },
           });
         } else if (status === "info") {
-          history.push(`/book/${book.id.toString()}`);
+          navigate(`/book/${book.id.toString()}`);
         } else {
           addOrUpdateBook({
             refetchQueries: [{ query: CountsDocument }],

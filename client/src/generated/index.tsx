@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -14,13 +15,12 @@ export type Scalars = {
   Float: number;
 };
 
-
 export type AddOrUpdateBookInput = {
-  id: Scalars['String'];
-  title: Scalars['String'];
-  status: Status;
   authors: Array<Scalars['String']>;
+  id: Scalars['String'];
+  status: Status;
   thumbnail: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type Author = {
@@ -32,23 +32,23 @@ export type Author = {
 export type Book = {
   __typename?: 'Book';
   _id: Scalars['String'];
-  id: Scalars['String'];
-  title: Scalars['String'];
-  status: Status;
   authors: Array<Scalars['String']>;
+  id: Scalars['String'];
+  status: Status;
   thumbnail: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type BooksInput = {
-  perPage?: Maybe<Scalars['Float']>;
-  page?: Maybe<Scalars['Float']>;
-  status?: Maybe<Status>;
+  page?: InputMaybe<Scalars['Float']>;
+  perPage?: InputMaybe<Scalars['Float']>;
+  status?: InputMaybe<Status>;
 };
 
 export type BooksResponse = {
   __typename?: 'BooksResponse';
-  totalPages: Scalars['Float'];
   books: Array<Book>;
+  totalPages: Scalars['Float'];
 };
 
 export type BooleanResponse = {
@@ -58,9 +58,9 @@ export type BooleanResponse = {
 
 export type CountResponse = {
   __typename?: 'CountResponse';
-  wishlist: Scalars['Float'];
-  reading: Scalars['Float'];
   read: Scalars['Float'];
+  reading: Scalars['Float'];
+  wishlist: Scalars['Float'];
 };
 
 export type GoogleBook = {
@@ -71,12 +71,12 @@ export type GoogleBook = {
 
 export type ImageLinks = {
   __typename?: 'ImageLinks';
+  extraLarge?: Maybe<Scalars['String']>;
+  large?: Maybe<Scalars['String']>;
+  medium?: Maybe<Scalars['String']>;
+  small?: Maybe<Scalars['String']>;
   smallThumbnail?: Maybe<Scalars['String']>;
   thumbnail?: Maybe<Scalars['String']>;
-  small?: Maybe<Scalars['String']>;
-  medium?: Maybe<Scalars['String']>;
-  large?: Maybe<Scalars['String']>;
-  extraLarge?: Maybe<Scalars['String']>;
 };
 
 export type LoginInput = {
@@ -92,20 +92,10 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  register: BooleanResponse;
-  login: LoginResponse;
   addOrUpdateBook: Book;
   deleteBook: BooleanResponse;
-};
-
-
-export type MutationRegisterArgs = {
-  input: RegisterInput;
-};
-
-
-export type MutationLoginArgs = {
-  input: LoginInput;
+  login: LoginResponse;
+  register: BooleanResponse;
 };
 
 
@@ -118,19 +108,29 @@ export type MutationDeleteBookArgs = {
   id: Scalars['String'];
 };
 
+
+export type MutationLoginArgs = {
+  input: LoginInput;
+};
+
+
+export type MutationRegisterArgs = {
+  input: RegisterInput;
+};
+
 export type Query = {
   __typename?: 'Query';
-  me: User;
   books: BooksResponse;
   checkBook: StatusResponse;
-  getSingleBook: GoogleBook;
-  search: Array<GoogleBook>;
   counts: CountResponse;
+  getSingleBook: GoogleBook;
+  me: User;
+  search: Array<GoogleBook>;
 };
 
 
 export type QueryBooksArgs = {
-  input: BooksInput;
+  input?: InputMaybe<BooksInput>;
 };
 
 
@@ -149,15 +149,15 @@ export type QuerySearchArgs = {
 };
 
 export type RegisterInput = {
-  username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export enum Status {
-  Wishlist = 'wishlist',
+  Read = 'read',
   Reading = 'reading',
-  Read = 'read'
+  Wishlist = 'wishlist'
 }
 
 export type StatusResponse = {
@@ -173,32 +173,32 @@ export type UpdateResponse = {
 
 export type User = {
   __typename?: 'User';
-  username: Scalars['String'];
-  email: Scalars['String'];
   _id: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type UserInput = {
-  username?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  about?: Maybe<Scalars['String']>;
+  about?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type VolumeInfo = {
   __typename?: 'VolumeInfo';
-  title: Scalars['String'];
-  description: Scalars['String'];
   authors: Array<Scalars['String']>;
   averageRating: Scalars['Float'];
-  ratingsCount: Scalars['Float'];
-  publisher: Scalars['String'];
-  publishedDate: Scalars['String'];
-  pageCount: Scalars['Float'];
-  mainCategory: Scalars['String'];
   categories: Array<Scalars['String']>;
+  description: Scalars['String'];
   imageLinks?: Maybe<ImageLinks>;
+  mainCategory: Scalars['String'];
+  pageCount: Scalars['Float'];
+  publishedDate: Scalars['String'];
+  publisher: Scalars['String'];
+  ratingsCount: Scalars['Float'];
+  title: Scalars['String'];
 };
 
 export type AddOrUpdateBookMutationVariables = Exact<{
@@ -206,150 +206,66 @@ export type AddOrUpdateBookMutationVariables = Exact<{
 }>;
 
 
-export type AddOrUpdateBookMutation = (
-  { __typename?: 'Mutation' }
-  & { addOrUpdateBook: (
-    { __typename?: 'Book' }
-    & Pick<Book, '_id' | 'authors' | 'title' | 'id' | 'thumbnail' | 'status'>
-  ) }
-);
+export type AddOrUpdateBookMutation = { __typename?: 'Mutation', addOrUpdateBook: { __typename?: 'Book', _id: string, authors: Array<string>, title: string, id: string, thumbnail: string, status: Status } };
 
 export type BooksQueryVariables = Exact<{
   input: BooksInput;
 }>;
 
 
-export type BooksQuery = (
-  { __typename?: 'Query' }
-  & { books: (
-    { __typename?: 'BooksResponse' }
-    & Pick<BooksResponse, 'totalPages'>
-    & { books: Array<(
-      { __typename?: 'Book' }
-      & Pick<Book, '_id' | 'id' | 'title' | 'thumbnail' | 'status' | 'authors'>
-    )> }
-  ) }
-);
+export type BooksQuery = { __typename?: 'Query', books: { __typename?: 'BooksResponse', totalPages: number, books: Array<{ __typename?: 'Book', _id: string, id: string, title: string, thumbnail: string, status: Status, authors: Array<string> }> } };
 
 export type CheckBookQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type CheckBookQuery = (
-  { __typename?: 'Query' }
-  & { checkBook: (
-    { __typename?: 'StatusResponse' }
-    & Pick<StatusResponse, 'status'>
-  ) }
-);
+export type CheckBookQuery = { __typename?: 'Query', checkBook: { __typename?: 'StatusResponse', status?: string | null } };
 
 export type CountsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CountsQuery = (
-  { __typename?: 'Query' }
-  & { counts: (
-    { __typename?: 'CountResponse' }
-    & Pick<CountResponse, 'wishlist' | 'reading' | 'read'>
-  ) }
-);
+export type CountsQuery = { __typename?: 'Query', counts: { __typename?: 'CountResponse', wishlist: number, reading: number, read: number } };
 
 export type DeleteBookMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type DeleteBookMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteBook: (
-    { __typename?: 'BooleanResponse' }
-    & Pick<BooleanResponse, 'ok'>
-  ) }
-);
+export type DeleteBookMutation = { __typename?: 'Mutation', deleteBook: { __typename?: 'BooleanResponse', ok: boolean } };
 
 export type GetSingleBookQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetSingleBookQuery = (
-  { __typename?: 'Query' }
-  & { getSingleBook: (
-    { __typename?: 'GoogleBook' }
-    & Pick<GoogleBook, 'id'>
-    & { volumeInfo: (
-      { __typename?: 'VolumeInfo' }
-      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors' | 'pageCount' | 'publisher' | 'publishedDate' | 'mainCategory' | 'categories'>
-      & { imageLinks?: Maybe<(
-        { __typename?: 'ImageLinks' }
-        & Pick<ImageLinks, 'smallThumbnail' | 'thumbnail' | 'small' | 'medium' | 'large' | 'extraLarge'>
-      )> }
-    ) }
-  ) }
-);
+export type GetSingleBookQuery = { __typename?: 'Query', getSingleBook: { __typename?: 'GoogleBook', id: string, volumeInfo: { __typename?: 'VolumeInfo', title: string, description: string, averageRating: number, ratingsCount: number, authors: Array<string>, pageCount: number, publisher: string, publishedDate: string, mainCategory: string, categories: Array<string>, imageLinks?: { __typename?: 'ImageLinks', smallThumbnail?: string | null, thumbnail?: string | null, small?: string | null, medium?: string | null, large?: string | null, extraLarge?: string | null } | null } } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
 
-export type LoginMutation = (
-  { __typename?: 'Mutation' }
-  & { login: (
-    { __typename?: 'LoginResponse' }
-    & Pick<LoginResponse, 'token'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, '_id' | 'username' | 'email'>
-    ) }
-  ) }
-);
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', token: string, user: { __typename?: 'User', _id: string, username: string, email: string } } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = (
-  { __typename?: 'Query' }
-  & { me: (
-    { __typename?: 'User' }
-    & Pick<User, 'username' | 'email' | '_id'>
-  ) }
-);
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', username: string, email: string, _id: string } };
 
 export type RegisterMutationVariables = Exact<{
   input: RegisterInput;
 }>;
 
 
-export type RegisterMutation = (
-  { __typename?: 'Mutation' }
-  & { register: (
-    { __typename?: 'BooleanResponse' }
-    & Pick<BooleanResponse, 'ok'>
-  ) }
-);
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'BooleanResponse', ok: boolean } };
 
 export type SearchQueryVariables = Exact<{
   term: Scalars['String'];
 }>;
 
 
-export type SearchQuery = (
-  { __typename?: 'Query' }
-  & { search: Array<(
-    { __typename?: 'GoogleBook' }
-    & Pick<GoogleBook, 'id'>
-    & { volumeInfo: (
-      { __typename?: 'VolumeInfo' }
-      & Pick<VolumeInfo, 'title' | 'description' | 'averageRating' | 'ratingsCount' | 'authors' | 'pageCount' | 'publisher' | 'publishedDate' | 'mainCategory' | 'categories'>
-      & { imageLinks?: Maybe<(
-        { __typename?: 'ImageLinks' }
-        & Pick<ImageLinks, 'smallThumbnail' | 'thumbnail' | 'small' | 'medium' | 'large' | 'extraLarge'>
-      )> }
-    ) }
-  )> }
-);
+export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'GoogleBook', id: string, volumeInfo: { __typename?: 'VolumeInfo', title: string, description: string, averageRating: number, ratingsCount: number, authors: Array<string>, pageCount: number, publisher: string, publishedDate: string, mainCategory: string, categories: Array<string>, imageLinks?: { __typename?: 'ImageLinks', smallThumbnail?: string | null, thumbnail?: string | null, small?: string | null, medium?: string | null, large?: string | null, extraLarge?: string | null } | null } }> };
 
 
 export const AddOrUpdateBookDocument = gql`
