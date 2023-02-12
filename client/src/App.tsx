@@ -12,6 +12,8 @@ import {
 
 import { Home, Login, Register, Dashboard, BookDetail, List } from "./pages";
 
+import Layout from "./layout/Layout";
+
 export const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:4000/graphql",
 });
@@ -40,12 +42,14 @@ const App = () => (
   <ApolloProvider client={client}>
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/lists/:listname" element={<List />} />
-        <Route path="/book/:id" element={<BookDetail />} />
+        <Route element={<Layout />}>
+          <Route index path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/lists/:listname" element={<List />} />
+          <Route path="/book/:id" element={<BookDetail />} />
+        </Route>
       </Routes>
     </Router>
   </ApolloProvider>
