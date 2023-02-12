@@ -6,11 +6,7 @@ import {
   createHttpLink,
   InMemoryCache,
   ApolloLink,
-  concat,
 } from "@apollo/client";
-
-// import GuestRoute from "./routes/GuestRoute";
-// import ProtectedRoute from "./routes/ProtectedRoute";
 
 // TODO: create guest and protected route
 
@@ -20,12 +16,14 @@ export const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:4000/graphql",
 });
 
-const authMiddleware = new ApolloLink((operation, forward) => {
+const authLink = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      authorization: localStorage.getItem("token") || null,
+      ...(localStorage.getItem("token")
+        ? { authorization: `Bearer ${localStorage.getItem("token")}` }
+        : {}),
     },
   }));
 
@@ -35,7 +33,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
   connectToDevTools: true,
-  link: concat(link, authMiddleware),
+  link: ApolloLink.from([authLink, link]),
 });
 
 const App = () => (
