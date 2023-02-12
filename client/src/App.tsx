@@ -15,7 +15,6 @@ import {
 // TODO: create guest and protected route
 
 import { Home, Login, Register, Dashboard, BookDetail, List } from "./pages";
-import { Navbar, Footer } from "./layout";
 
 export const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:4000/graphql",
@@ -43,30 +42,12 @@ const App = () => (
   <ApolloProvider client={client}>
     <Router>
       <Routes>
-        <Route path="/">
-          <Home />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/register">
-          <Register />
-        </Route>
-        <>
-          <Navbar />
-          <div className="flex-1 h-full">
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
-            <Route path="/lists/:listname">
-              <List />
-            </Route>
-            <Route path="/book/:id">
-              <BookDetail />
-            </Route>
-          </div>
-          <Footer />
-        </>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/lists/:listname" element={<List />} />
+        <Route path="/book/:id" element={<BookDetail />} />
       </Routes>
     </Router>
   </ApolloProvider>
