@@ -12,29 +12,30 @@
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^9.0.1",
-    "apollo-server": "^2.1.0",
-    "apollo-server-express": "^2.1.0",
-    "bcryptjs": "^2.4.3",
+    "apollo-server": "^3.13.0",
+    "apollo-server-express": "^3.13.0",
+    "bcryptjs": "^3.0.1",
     "body-parser": "^1.20.1",
     "class-validator": "^0.14.0",
     "cors": "^2.8.5",
-    "date-fns": "^2.29.3",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-jwt": "^8.4.1",
-    "graphql": "^15.0.0",
+    "graphql": "^16.10.0",
+    "graphql-scalars": "^1.24.1",
     "jsonwebtoken": "^9.0.0",
     "merge-graphql-schemas": "^1.7.0",
-    "mongoose": "^6.9.1",
+    "mongoose": "^8.10.1",
     "node-fetch": "^3.3.0",
-    "nodemon": "^2.0.20",
-    "reflect-metadata": "^0.1.13",
+    "nodemon": "^3.1.9",
+    "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.1",
-    "type-graphql": "^1.1.1",
-    "typescript": "^4.9.5",
-    "xml2js": "^0.4.23"
+    "type-graphql": "^2.0.0-rc.2",
+    "typescript": "^5.7.3",
+    "xml2js": "^0.6.2"
   },
   "engines": {
-    "node": "18.13.0"
+    "node": "22.9.0"
   }
 }

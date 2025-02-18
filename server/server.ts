@@ -8,6 +8,8 @@ import cors from "cors";
 require("dotenv").config();
 
 import connect from "./config/database";
+import { AuthResolver } from "./resolvers/auth";
+import { BookResolver } from "./resolvers/book";
 
 (async () => {
   const app = express();
@@ -16,12 +18,11 @@ import connect from "./config/database";
   connect();
 
   const schema = await buildSchema({
-    resolvers: [`${__dirname}/resolvers/*.ts`],
+    resolvers: [AuthResolver, BookResolver],
   });
 
   const server = new ApolloServer({
     schema,
-    playground: true,
     context: ({ req, res }) => ({ req, res }),
   });
 
@@ -35,6 +36,8 @@ import connect from "./config/database";
       algorithms: ["RS256", "HS256"],
     })
   );
+
+  await server.start();
 
   server.applyMiddleware({ app });
 
