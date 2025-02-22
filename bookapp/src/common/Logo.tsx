@@ -1,18 +1,14 @@
 interface LogoProps {
-  size: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
+  className?: string;
 }
 
-const Logo = ({ size = "lg" }: LogoProps) => {
-  const fontSize = `text-${size}`;
-
-  return (
-    <h1
-      className={`${fontSize} text-foreground leading-6`}
-      style={{ fontFamily: "Calistoga, sans-serif" }}
-    >
-      Booker
-    </h1>
-  );
-};
+const Logo = ({ className = "" }: LogoProps) => (
+  <h1
+    className={`text-foreground leading-6 ${className}`}
+    style={{ fontFamily: "Calistoga, sans-serif" }}
+  >
+    Booker
+  </h1>
+);
 
 export default Logo;

@@ -1,11 +1,11 @@
 const Footer = () => {
   return (
-    <div className="bg-background_two py-4 text-center">
+    <div className="bg-background text-center pb-4">
       <h3
         className="text-md ml-1 text-foreground"
         style={{ fontFamily: "Calistoga, sans-serif" }}
       >
-        merko &copy; 2019
+        Merim @ {new Date().getFullYear()}
       </h3>
     </div>
   );

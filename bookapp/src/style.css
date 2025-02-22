@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #ededed;
-  --color-foreground: #333;
+  --color-background: #fff2ea;
+  --color-foreground: #592c29;
 }
 
 @utility container {
@@ -26,6 +26,11 @@
   html {
     height: 100%;
   }
+}
+
+@font-face {
+  font-family: "Calistoga";
+  src: local("Calistoga-Regular"), url("/assets/fonts/Calistoga-Regular.ttf");
 }
 
 #root {

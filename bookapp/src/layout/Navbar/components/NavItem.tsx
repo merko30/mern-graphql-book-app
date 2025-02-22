@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 type NavItemProps = {
   show: boolean;
-  className?: string;
   children: React.ReactNode;
 } & (
   | {
@@ -18,19 +17,11 @@ type NavItemProps = {
     }
 );
 
-const NavItem = ({
-  isButton,
-  onClick,
-  show,
-  to,
-  children,
-  className: _className = "",
-}: NavItemProps) => {
+const NavItem = ({ isButton, onClick, show, to, children }: NavItemProps) => {
   useEffect(() => {}, [show]);
 
   const className =
-    "whitespace-no-wrap text-lg md:text-sm uppercase font-bold text-foreground hover:text-orange-900 no-underline " +
-    _className;
+    "text-sm text-foreground font-medium tracking-widest uppercase hover:opacity-80";
   return show ? (
     isButton ? (
       <button onClick={onClick} className={className}>
