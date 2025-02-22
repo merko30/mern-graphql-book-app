@@ -5,21 +5,27 @@
   --color-foreground: #333;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Open Sans", sans-serif;
+@utility container {
+  margin: 0 auto;
 }
 
-button,
-input {
-  outline: 0 !important;
-}
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
+  }
 
-body,
-html {
-  height: 100%;
+  button,
+  input {
+    outline: 0 !important;
+  }
+
+  body,
+  html {
+    height: 100%;
+  }
 }
 
 #root {

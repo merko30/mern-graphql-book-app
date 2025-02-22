@@ -43,9 +43,10 @@ const Navbar = () => {
 
       <MenuButton onClick={() => setShow(!show)} />
 
+      <Search />
       {!loading && (
         <ul
-          className={`${menuClass} flex-1 pt-4 md:pt-0 border-b border-background_two md:border-b-0 md:flex items-center justify-end flex-col md:flex-row`}
+          className={`${menuClass} flex-1 gap-4 pt-4 md:pt-0 border-b border-background_two md:border-b-0 md:flex items-center justify-end flex-col md:flex-row`}
         >
           <NavItem show={!loggedIn} to="/register">
             Register
@@ -54,9 +55,6 @@ const Navbar = () => {
           <NavItem show={!loggedIn} to="/login">
             Login
           </NavItem>
-
-          <Search />
-
           <NavItem show={loggedIn} isButton={true} onClick={handleLogout}>
             Logout
           </NavItem>
