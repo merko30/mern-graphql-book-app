@@ -111,7 +111,9 @@ class VolumeInfo {
   @Field(() => Number, { nullable: true })
   averageRating: number;
 
-  @Field(() => Number)
+  @Field(() => Number, {
+    nullable: true,
+  })
   ratingsCount: Number;
 
   @Field(() => String)
@@ -123,7 +125,7 @@ class VolumeInfo {
   @Field(() => Number)
   pageCount: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   mainCategory: string;
 
   @Field(() => [String])
