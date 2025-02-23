@@ -19,14 +19,16 @@ export const link = createHttpLink({
 
 const authLink = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
-  operation.setContext(({ headers = {} }) => ({
-    headers: {
-      ...headers,
-      ...(localStorage.getItem("token")
-        ? { authorization: `Bearer ${localStorage.getItem("token")}` }
-        : {}),
-    },
-  }));
+  operation.setContext(({ headers = {} }) => {
+    return {
+      headers: {
+        ...headers,
+        ...(localStorage.getItem("token")
+          ? { Authorization: localStorage.getItem("token") }
+          : {}),
+      },
+    };
+  });
 
   return forward(operation);
 });

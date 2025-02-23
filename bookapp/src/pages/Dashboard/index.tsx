@@ -6,9 +6,14 @@ import { Status, useBooksQuery, useCountsQuery } from "src/generated/index";
 import BookList from "./components/BookList";
 
 const Dashboard = () => {
-  const { data, loading, error } = useBooksQuery({ variables: { input: {} } });
+  const { data, loading, error } = useBooksQuery({
+    variables: {
+      input: {},
+    },
+  });
   const { data: countData } = useCountsQuery();
 
+  console.log(JSON.stringify(error, null, 2));
   return (
     <div className="container h-full">
       {loading && <Loading className="mx-auto mt-32" />}

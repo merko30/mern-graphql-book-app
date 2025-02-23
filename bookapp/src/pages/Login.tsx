@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
-//import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import * as yup from "yup";
 
@@ -9,7 +9,7 @@ import { TextInput, Button, Error, LoadingTwo } from "src/common/index";
 import { AuthLayout } from "src/layout/index";
 
 import { useLoginMutation, MeDocument, MeQuery } from "src/generated/index";
-
+import Logo from "src/common/Logo";
 interface FormData {
   emailOrUsername: string;
   password: string;
@@ -21,12 +21,8 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
-  const {
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<FormData>({
-    //resolver: yupResolver(schema),
+  const { handleSubmit, register } = useForm<FormData>({
+    resolver: yupResolver(schema),
     reValidateMode: "onSubmit",
     mode: "onTouched",
   });
@@ -48,8 +44,6 @@ const Login = () => {
     },
   });
 
-  return <h1>login</h1>;
-
   return (
     <AuthLayout
       title="Welcome back"
@@ -58,40 +52,24 @@ const Login = () => {
       linkText="Sign up"
     >
       <form
-        onSubmit={handleSubmit(({ emailOrUsername, password }) => {
+        onSubmit={handleSubmit(({ emailOrUsername, password }) =>
           loginMutation({
             variables: { input: { emailOrUsername, password } },
-          });
-        })}
+          })
+        )}
       >
         {error && <Error error={error!.message} />}
-        <Controller
-          control={control}
-          defaultValue=""
-          name="emailOrUsername"
-          render={(props) => (
-            <TextInput
-              {...props.field}
-              icon={faUser}
-              placeholder="Email or username"
-              error={errors.emailOrUsername?.message}
-            />
-          )}
+        <TextInput
+          icon={faUser}
+          placeholder="Email or username"
+          {...register("emailOrUsername")}
         />
-
-        <Controller
-          control={control}
-          name="password"
-          defaultValue=""
-          render={(props) => (
-            <TextInput
-              {...props.field}
-              type="password"
-              icon={faKey}
-              placeholder="Password"
-              error={errors.password?.message}
-            />
-          )}
+        <TextInput
+          type="password"
+          icon={faKey}
+          placeholder="Password"
+          {...register("password")}
+          className="mb-4"
         />
 
         <Button type="submit" className="w-full">

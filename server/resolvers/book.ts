@@ -28,31 +28,27 @@ export class BookResolver {
     @Ctx() ctx: Context,
     @Arg("input", {
       validate: false,
-      defaultValue: {
-        perPage: 15,
-        page: 1,
-      },
     })
     input?: BooksInput
   ) {
-    const { perPage, page, status } = input!;
+    const { perPage = 10, page = 1, status } = input!;
 
     const query: FilterQuery<
       Pick<BookI, "_id" | "title" | "authors" | "status" | "user" | "thumbnail">
-    > = { user: ctx.req.user?._id };
+    > = { user: ctx.req.auth?._id };
 
     if (status) {
       query.status = status;
     }
 
-    const limit = perPage!;
+    const limit = perPage;
     const skip = page! * perPage! - perPage!;
 
-    const count = await Book.countDocuments({ user: ctx.req.user?._id });
-    const books = await Book.find(query).skip(skip).limit(limit!);
+    const count = await Book.countDocuments({ user: ctx.req.auth?._id });
+    const books = await Book.find(query).skip(skip).limit(limit);
 
     return {
-      totalPages: Math.ceil(count / perPage!),
+      totalPages: Math.ceil(count / limit),
       books,
     };
   }
@@ -64,7 +60,7 @@ export class BookResolver {
   ) {
     const book = await Book.findOneAndUpdate(
       { _id: input.id },
-      { ...input, user: ctx.req.user?._id },
+      { ...input, user: ctx.req.auth?._id },
       { upsert: true, new: true }
     );
 
@@ -78,7 +74,7 @@ export class BookResolver {
   ): Promise<StatusResponse> {
     const book = await Book.findOne({
       _id: id,
-      user: ctx.req.user!._id,
+      user: ctx.req.auth!._id,
     });
     if (book) {
       return { status: book.status };
@@ -121,15 +117,15 @@ export class BookResolver {
   @Query(() => CountResponse)
   async counts(@Ctx() { req }: Context) {
     const wishlist = await Book.countDocuments({
-      user: req.user!._id,
+      user: req.auth!._id,
       status: Status.wishlist,
     });
     const reading = await Book.countDocuments({
-      user: req.user!._id,
+      user: req.auth!._id,
       status: Status.reading,
     });
     const read = await Book.countDocuments({
-      user: req.user!._id,
+      user: req.auth!._id,
       status: Status.read,
     });
 

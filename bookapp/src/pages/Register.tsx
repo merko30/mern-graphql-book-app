@@ -54,10 +54,9 @@ const Register = () => {
       to="/login"
     >
       <form
-        onSubmit={handleSubmit((values) => {
-          console.log(values);
-          // registerMutation({ variables: { input: values } });
-        })}
+        onSubmit={handleSubmit((values) =>
+          registerMutation({ variables: { input: values } })
+        )}
       >
         {error && <Error error={error.message} />}
 

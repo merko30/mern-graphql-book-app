@@ -126,7 +126,7 @@ export type Query = {
 
 
 export type QueryBooksArgs = {
-  input?: BooksInput;
+  input?: InputMaybe<BooksInput>;
 };
 
 
