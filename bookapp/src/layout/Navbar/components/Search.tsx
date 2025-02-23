@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDebounceValue } from "usehooks-ts";
+
+import { useSearchQuery } from "src/generated";
 
 const Search = () => {
   const [term, setTerm] = useState("");
+
+  const { refetch, ...data } = useSearchQuery({ skip: !term });
+
+  const [debouncedValue] = useDebounceValue(term, 1000);
+
+  useEffect(() => {
+    refetch({ term: debouncedValue });
+  }, [debouncedValue]);
+
+  console.log(data);
 
   return (
     <div className="container w-full flex-1 relative bg-white rounded-md">

@@ -108,7 +108,7 @@ class VolumeInfo {
   @Field(() => [String])
   authors: [string];
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   averageRating: number;
 
   @Field(() => Number)

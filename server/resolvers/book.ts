@@ -107,7 +107,7 @@ export class BookResolver {
 
     const results = (await response.json()) as GoogleResponse;
 
-    return results.items;
+    return results?.items ?? [];
   }
 
   @Mutation(() => BooleanResponse)
