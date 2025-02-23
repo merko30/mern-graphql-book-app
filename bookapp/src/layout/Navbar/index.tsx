@@ -37,7 +37,7 @@ const Navbar = () => {
 
   return (
     <div className="container flex flex-col md:flex-row md:items-center justify-between pt-2 mb-5">
-      <Link to="/dashboard" className="flex-1">
+      <Link to={data && data.me ? "/dashboard" : "/"} className="flex-1">
         <Logo className="text-2xl" />
       </Link>
 

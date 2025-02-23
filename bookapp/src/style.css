@@ -3,6 +3,8 @@
 @theme {
   --color-background: #fff2ea;
   --color-foreground: #592c29;
+  --color-negative: #b00020;
+  --color-positive: #4caf50;
 }
 
 @utility container {

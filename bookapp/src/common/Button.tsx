@@ -4,8 +4,6 @@ type ButtonProps = {
   children: React.ReactNode;
   className?: string;
   variant?: "primary" | "positive" | "negative" | "neutral";
-  border?: boolean;
-  outline?: boolean;
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
 } & (
   | {
@@ -23,24 +21,23 @@ type ButtonProps = {
     }
 );
 
+const VARIANT_MAP = {
+  primary: "bg-foreground text-white",
+  positive: "bg-positive hover:bg-white text-white hover:text-positive",
+  negative: "bg-negative hover:bg-white text-white hover:text-negative",
+  neutral: "bg-neutral hover:bg-white text-white hover:text-neutral",
+};
+
 const Button = ({
   onClick,
   children,
   type = "button",
-  border = true,
   to,
   variant = "primary",
   className,
-  outline = false,
 }: ButtonProps) => {
-  const buttonColor = !outline
-    ? `bg-${variant} hover:bg-white`
-    : `bg-white hover:bg-${variant}`;
-  const buttonText = !outline
-    ? `text-white hover:text-${variant}`
-    : `text-${variant} hover:text-white`;
-  const borderClass = border && `border border-${variant}`;
-  const classname = `rounded-lg ${buttonColor} ${buttonText} ${borderClass} px-4 py-2 uppercase ${className}`;
+  const variantClass = VARIANT_MAP[variant] ?? "";
+  const classname = `rounded-lg px-4 py-2 uppercase cursor-pointer ${variantClass} ${className}`;
   return to ? (
     <Link to={to} className={classname}>
       {children}
