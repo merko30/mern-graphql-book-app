@@ -102,10 +102,14 @@ class VolumeInfo {
   @Field(() => String)
   title: string;
 
-  @Field(() => String)
+  @Field(() => String, {
+    nullable: true,
+  })
   description: string;
 
-  @Field(() => [String])
+  @Field(() => [String], {
+    nullable: true,
+  })
   authors: [string];
 
   @Field(() => Number, { nullable: true })
@@ -116,10 +120,14 @@ class VolumeInfo {
   })
   ratingsCount: Number;
 
-  @Field(() => String)
+  @Field(() => String, {
+    nullable: true,
+  })
   publisher: string;
 
-  @Field(() => String)
+  @Field(() => String, {
+    nullable: true,
+  })
   publishedDate: string;
 
   @Field(() => Number)
@@ -128,7 +136,9 @@ class VolumeInfo {
   @Field(() => String, { nullable: true })
   mainCategory: string;
 
-  @Field(() => [String])
+  @Field(() => [String], {
+    nullable: true,
+  })
   categories: [string];
 
   @Field(() => ImageLinks, { nullable: true })

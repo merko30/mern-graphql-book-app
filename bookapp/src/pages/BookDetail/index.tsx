@@ -127,7 +127,7 @@ const BookDetail = () => {
               input: {
                 title: book.volumeInfo.title,
                 thumbnail: getBookCover(book.volumeInfo.imageLinks),
-                authors: book.volumeInfo.authors,
+                authors: book.volumeInfo.authors ?? [],
                 id: book.id,
                 status,
               },
@@ -137,6 +137,20 @@ const BookDetail = () => {
       }
     }
   };
+
+  if (!getSingleBook) return null;
+
+  const {
+    volumeInfo: {
+      title,
+      authors,
+      imageLinks,
+      averageRating,
+      pageCount,
+      publishedDate,
+      description,
+    },
+  } = getSingleBook;
 
   return (
     <div className=" my-5 rounded-md p-3 relative w-full md:w-2/3 mx-auto">
@@ -153,8 +167,8 @@ const BookDetail = () => {
             <div className="row-start-1 row-end-2 my-2">
               <img
                 className="object-contain"
-                src={getBookCover(getSingleBook.volumeInfo.imageLinks)}
-                alt={getSingleBook.volumeInfo.title}
+                src={getBookCover(imageLinks)}
+                alt={title}
               />
             </div>
 
@@ -166,19 +180,16 @@ const BookDetail = () => {
                 onClick={onMenuItemClick}
                 className="mr-0 mt-2"
                 book={{
-                  title: getSingleBook.volumeInfo.title,
+                  title: title,
                   id: getSingleBook.id,
-                  authors: getSingleBook.volumeInfo.authors,
-                  thumbnail: getBookCover(getSingleBook.volumeInfo.imageLinks),
+                  authors: authors ?? [],
+                  thumbnail: getBookCover(imageLinks),
                 }}
               />
-              <h1 className="text-xl md:text-2xl pr-6">
-                {getSingleBook.volumeInfo.title}
-              </h1>
-              {getSingleBook.volumeInfo.authors &&
-                getSingleBook.volumeInfo.authors.map((a, i) => {
-                  const last =
-                    getSingleBook.volumeInfo.authors.length - 1 === i;
+              <h1 className="text-xl md:text-2xl pr-6">{title}</h1>
+              {authors &&
+                authors.map((a, i) => {
+                  const last = authors ?? [].length - 1 === i;
                   return (
                     <h2 key={a} className="text-md inline-block">
                       {a}
@@ -188,36 +199,38 @@ const BookDetail = () => {
                 })}
 
               <div className="flex flex-col md:flex-row items-center my-2 bg-background_two p-2 rounded justify-evenly">
-                {getSingleBook.volumeInfo.averageRating && (
+                {averageRating && (
                   <IconWithLabel
                     topLabel="average rating"
                     icon={faStar}
                     iconColor="gold"
-                    label={getSingleBook.volumeInfo.averageRating}
+                    label={averageRating}
                   />
                 )}
                 <IconWithLabel
                   topLabel="pages"
-                  label={`${getSingleBook.volumeInfo.pageCount}`}
+                  label={`${pageCount}`}
                   iconColor="gray"
                   icon={faBookOpen}
                 />
 
-                {getSingleBook.volumeInfo.publishedDate && (
+                {publishedDate && (
                   <IconWithLabel
                     topLabel="published at"
-                    label={formatDate(getSingleBook.volumeInfo.publishedDate)}
+                    label={formatDate(publishedDate)}
                     iconColor="gray"
                     icon={faCalendarDay}
                   />
                 )}
               </div>
-              <p
-                className="text-sm text-gray-800 mt-4"
-                dangerouslySetInnerHTML={{
-                  __html: getSingleBook.volumeInfo.description,
-                }}
-              />
+              {description && (
+                <p
+                  className="text-sm text-gray-800 mt-4"
+                  dangerouslySetInnerHTML={{
+                    __html: description,
+                  }}
+                />
+              )}
             </div>
           </div>
         )}

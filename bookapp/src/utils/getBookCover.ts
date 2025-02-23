@@ -11,7 +11,15 @@ interface ImageLinks {
 
 const getBookCover = (imageLinks: ImageLinks | null | undefined): string => {
   if (imageLinks) {
-    return Object.values(imageLinks)[0];
+    return (
+      imageLinks.extraLarge ||
+      imageLinks.large ||
+      imageLinks.medium ||
+      imageLinks.small ||
+      imageLinks.thumbnail ||
+      imageLinks.smallThumbnail ||
+      "nophoto"
+    );
   }
   return "nophoto";
 };

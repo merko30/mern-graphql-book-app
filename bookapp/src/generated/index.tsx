@@ -170,15 +170,15 @@ export type User = {
 
 export type VolumeInfo = {
   __typename?: 'VolumeInfo';
-  authors: Array<Scalars['String']['output']>;
+  authors?: Maybe<Array<Scalars['String']['output']>>;
   averageRating?: Maybe<Scalars['Float']['output']>;
-  categories: Array<Scalars['String']['output']>;
-  description: Scalars['String']['output'];
+  categories?: Maybe<Array<Scalars['String']['output']>>;
+  description?: Maybe<Scalars['String']['output']>;
   imageLinks?: Maybe<ImageLinks>;
   mainCategory?: Maybe<Scalars['String']['output']>;
   pageCount: Scalars['Float']['output'];
-  publishedDate: Scalars['String']['output'];
-  publisher: Scalars['String']['output'];
+  publishedDate?: Maybe<Scalars['String']['output']>;
+  publisher?: Maybe<Scalars['String']['output']>;
   ratingsCount?: Maybe<Scalars['Float']['output']>;
   title: Scalars['String']['output'];
 };
@@ -221,7 +221,7 @@ export type GetSingleBookQueryVariables = Exact<{
 }>;
 
 
-export type GetSingleBookQuery = { __typename?: 'Query', getSingleBook: { __typename?: 'GoogleBook', id: string, volumeInfo: { __typename?: 'VolumeInfo', title: string, description: string, averageRating?: number | null, ratingsCount?: number | null, authors: Array<string>, pageCount: number, publisher: string, publishedDate: string, mainCategory?: string | null, categories: Array<string>, imageLinks?: { __typename?: 'ImageLinks', smallThumbnail?: string | null, thumbnail?: string | null, small?: string | null, medium?: string | null, large?: string | null, extraLarge?: string | null } | null } } };
+export type GetSingleBookQuery = { __typename?: 'Query', getSingleBook: { __typename?: 'GoogleBook', id: string, volumeInfo: { __typename?: 'VolumeInfo', title: string, description?: string | null, averageRating?: number | null, ratingsCount?: number | null, authors?: Array<string> | null, pageCount: number, publisher?: string | null, publishedDate?: string | null, mainCategory?: string | null, categories?: Array<string> | null, imageLinks?: { __typename?: 'ImageLinks', smallThumbnail?: string | null, thumbnail?: string | null, small?: string | null, medium?: string | null, large?: string | null, extraLarge?: string | null } | null } } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -247,7 +247,7 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'GoogleBook', id: string, volumeInfo: { __typename?: 'VolumeInfo', title: string, description: string, averageRating?: number | null, ratingsCount?: number | null, authors: Array<string>, pageCount: number, publisher: string, publishedDate: string, mainCategory?: string | null, categories: Array<string>, imageLinks?: { __typename?: 'ImageLinks', smallThumbnail?: string | null, thumbnail?: string | null, small?: string | null, medium?: string | null, large?: string | null, extraLarge?: string | null } | null } }> };
+export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'GoogleBook', id: string, volumeInfo: { __typename?: 'VolumeInfo', title: string, description?: string | null, averageRating?: number | null, ratingsCount?: number | null, authors?: Array<string> | null, pageCount: number, publisher?: string | null, publishedDate?: string | null, mainCategory?: string | null, categories?: Array<string> | null, imageLinks?: { __typename?: 'ImageLinks', smallThumbnail?: string | null, thumbnail?: string | null, small?: string | null, medium?: string | null, large?: string | null, extraLarge?: string | null } | null } }> };
 
 
 export const AddOrUpdateBookDocument = gql`
