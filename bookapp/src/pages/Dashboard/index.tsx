@@ -4,6 +4,7 @@ import Error from "src/common/Error";
 import { Status, useBooksQuery, useCountsQuery } from "src/generated/index";
 
 import BookList from "./components/BookList";
+import MultipleContainers from "./Comp";
 
 const Dashboard = () => {
   const { data, loading, error } = useBooksQuery({
@@ -13,13 +14,12 @@ const Dashboard = () => {
   });
   const { data: countData } = useCountsQuery();
 
-  console.log(JSON.stringify(error, null, 2));
   return (
     <div className="container h-full">
       {loading && <Loading className="mx-auto mt-32" />}
       {error && <Error error={error.message} />}
 
-      {data && countData && (
+      {/* {data && countData && (
         <div className="py-10 w-100 h-full">
           <BookList
             books={data.books.books.filter((b) => b.status === Status.Wishlist)}
@@ -37,7 +37,8 @@ const Dashboard = () => {
             listName={Status.Read}
           />
         </div>
-      )}
+      )} */}
+      <MultipleContainers />
     </div>
   );
 };

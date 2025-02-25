@@ -10,4 +10,9 @@ export default defineConfig({
       src: "/src",
     },
   },
+  css: {
+    modules: {
+      scopeBehaviour: "local", // Default, ensures styles are scoped
+    },
+  },
 });
