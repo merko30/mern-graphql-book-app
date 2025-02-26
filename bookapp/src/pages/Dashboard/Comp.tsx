@@ -243,11 +243,15 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
             "--columns": columns,
           } as React.CSSProperties
         }
-        className="w-full flex flex-col gap-2 items-center"
+        className="w-full flex flex-col gap-2 items-center rounded-md bg-white border border-gray-300"
         onClick={onClick}
         tabIndex={onClick ? 0 : undefined}
       >
-        {label ? <div className={styles.Header}>{label}</div> : null}
+        {label ? (
+          <div className="w-full flex justify-center border-b border-gray-300">
+            {label}
+          </div>
+        ) : null}
         {placeholder ? children : <ul>{children}</ul>}
       </Component>
     );
@@ -325,7 +329,7 @@ const dropAnimation: DropAnimation = {
   }),
 };
 
-type Items = Record<UniqueIdentifier, UniqueIdentifier[]>;
+type Items = Record<string, any[]>;
 
 interface Props {
   adjustScale?: boolean;
@@ -378,6 +382,8 @@ export default function MultipleContainers({
   vertical = false,
   scrollable,
 }: Props) {
+  console.log({ initialItems });
+
   const [items, setItems] = useState<Items>(
     () =>
       initialItems ?? {
@@ -657,14 +663,7 @@ export default function MultipleContainers({
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      <div
-        style={{
-          display: "inline-grid",
-          boxSizing: "border-box",
-          padding: 20,
-          gridAutoFlow: vertical ? "row" : "column",
-        }}
-      >
+      <div className="flex flex-row gap-2">
         <SortableContext
           items={[...containers, PLACEHOLDER_ID]}
           strategy={
@@ -677,7 +676,7 @@ export default function MultipleContainers({
             <DroppableContainer
               key={containerId}
               id={containerId}
-              label={minimal ? undefined : `Column ${containerId}`}
+              label={minimal ? undefined : containerId}
               columns={columns}
               items={items[containerId]}
               scrollable={scrollable}
@@ -705,7 +704,8 @@ export default function MultipleContainers({
               </SortableContext>
             </DroppableContainer>
           ))}
-          {minimal ? undefined : (
+          {/* TODO: ADD OPTION TO CREATE A NEW LIST */}
+          {/* {minimal ? undefined : (
             <DroppableContainer
               id={PLACEHOLDER_ID}
               disabled={isSortingContainer}
@@ -715,7 +715,7 @@ export default function MultipleContainers({
             >
               + Add column
             </DroppableContainer>
-          )}
+          )} */}
         </SortableContext>
       </div>
       {createPortal(

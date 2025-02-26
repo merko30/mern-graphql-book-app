@@ -1,10 +1,16 @@
 import Loading from "src/common/Loading";
 import Error from "src/common/Error";
 
-import { Status, useBooksQuery, useCountsQuery } from "src/generated/index";
+import {
+  Book,
+  Status,
+  useBooksQuery,
+  useCountsQuery,
+} from "src/generated/index";
 
 import BookList from "./components/BookList";
 import MultipleContainers from "./Comp";
+import { useMemo } from "react";
 
 const Dashboard = () => {
   const { data, loading, error } = useBooksQuery({
@@ -13,6 +19,28 @@ const Dashboard = () => {
     },
   });
   const { data: countData } = useCountsQuery();
+
+  const groupedBooks = useMemo(
+    () =>
+      data?.books.books.reduce<Record<string, Book[]>>(
+        (acc, book) => {
+          const status = book.status.toString();
+          if (!acc[status]) {
+            acc[status] = [];
+          }
+
+          acc[status].push(book);
+
+          return acc;
+        },
+        {
+          [Status.Wishlist]: [],
+          [Status.Reading]: [],
+          [Status.Read]: [],
+        }
+      ),
+    [data]
+  );
 
   return (
     <div className="container h-full">
@@ -38,7 +66,7 @@ const Dashboard = () => {
           />
         </div>
       )} */}
-      <MultipleContainers />
+      <MultipleContainers items={groupedBooks} />
     </div>
   );
 };
