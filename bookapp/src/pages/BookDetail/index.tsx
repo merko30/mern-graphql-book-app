@@ -76,6 +76,7 @@ const BookDetail = () => {
         } else {
           addOrUpdateBook({
             refetchQueries: [{ query: CountsDocument }],
+            // cache updating
             update: (cache, { data }) => {
               try {
                 const oldData = cache.readQuery<

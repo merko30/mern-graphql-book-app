@@ -1,4 +1,4 @@
-import { FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 
 import Book, { Book as BookI, Status } from "../models/book";
@@ -41,7 +41,7 @@ export class BookResolver {
       query.status = status;
     }
 
-    const limit = perPage;
+    const limit = perPage || 10;
     const skip = page! * perPage! - perPage!;
 
     const count = await Book.countDocuments({ user: ctx.req.auth?._id });
@@ -58,11 +58,16 @@ export class BookResolver {
     @Arg("input") input: AddOrUpdateBookInput,
     @Ctx() ctx: Context
   ) {
-    const book = await Book.findOneAndUpdate(
-      { _id: input.id },
-      { ...input, user: ctx.req.auth?._id },
-      { upsert: true, new: true }
-    );
+    if (input.id && mongoose.Types.ObjectId.isValid(input.id)) {
+      const updatedBook = await Book.updateOne(
+        { _id: input.id },
+        { ...input, user: ctx.req.auth?._id }
+      );
+
+      return updatedBook;
+    }
+
+    const book = await Book.create({ ...input, user: ctx.req.auth?._id });
 
     return book;
   }
