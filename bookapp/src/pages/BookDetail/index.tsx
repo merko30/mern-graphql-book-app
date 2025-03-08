@@ -98,6 +98,7 @@ const BookDetail = () => {
                   );
 
                   const {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     addOrUpdateBook: { __typename, ...newBook },
                   } = data;
 
@@ -121,6 +122,7 @@ const BookDetail = () => {
                   });
                 }
               } catch (err) {
+                console.log(err);
                 return;
               }
             },

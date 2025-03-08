@@ -10,18 +10,15 @@ interface ImageLinks {
 }
 
 const getBookCover = (imageLinks: ImageLinks | null | undefined): string => {
-  if (imageLinks) {
-    return (
-      imageLinks.extraLarge ||
-      imageLinks.large ||
-      imageLinks.medium ||
-      imageLinks.small ||
-      imageLinks.thumbnail ||
-      imageLinks.smallThumbnail ||
-      "nophoto"
-    );
-  }
-  return "nophoto";
+  return (
+    imageLinks?.extraLarge ??
+    imageLinks?.large ??
+    imageLinks?.medium ??
+    imageLinks?.small ??
+    imageLinks?.thumbnail ??
+    imageLinks?.smallThumbnail ??
+    "nophoto"
+  );
 };
 
 export default getBookCover;

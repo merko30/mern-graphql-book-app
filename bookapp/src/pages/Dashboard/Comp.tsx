@@ -44,18 +44,11 @@ import {
 import { CSS, Transform } from "@dnd-kit/utilities";
 import { coordinateGetter as multipleContainersCoordinateGetter } from "./multipleContainersKeyboardCoordinates";
 
-const defaultInitializer = (index: number) => index;
-
-export function createRange<T = number>(
-  length: number,
-  initializer: (index: number) => any = defaultInitializer
-): T[] {
-  return [...new Array(length)].map((_, index) => initializer(index));
-}
-
 import itemStyles from "./Item.module.css";
 import styles from "./Container.module.css";
 import { Book } from "src/generated";
+import { Link } from "react-router-dom";
+import capitalize from "src/utils/capitalize";
 
 export interface ItemProps {
   dragOverlay?: boolean;
@@ -176,6 +169,7 @@ export const Item = React.memo(
         >
           <div
             className={twMerge(
+              "cursor-pointer",
               styles.Item,
               dragging && styles.dragging,
               handle && styles.withHandle,
@@ -189,7 +183,13 @@ export const Item = React.memo(
             {...props}
             tabIndex={!handle ? 0 : undefined}
           >
-            {value.title}
+            <img
+              src={value.thumbnail}
+              alt={value.title}
+              className="w-24 h-auto object-cover"
+              title={value.title}
+            />
+            {/* {value.title} */}
           </div>
         </li>
       );
@@ -245,13 +245,13 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
             "--columns": columns,
           } as React.CSSProperties
         }
-        className="w-full flex flex-col gap-2 items-center rounded-md bg-white border border-gray-300"
+        className="w-full flex flex-col p-2 gap-2 rounded-md bg-white/60 border border-gray-100"
         onClick={onClick}
         tabIndex={onClick ? 0 : undefined}
       >
         {label ? (
-          <div className="w-full flex justify-center border-b border-gray-300">
-            {label}
+          <div className="w-full flex justify-between p-2 border-b border-gray-100">
+            {capitalize(label)} <Link to={`/lists/${label}`}>See all</Link>
           </div>
         ) : null}
         {placeholder ? children : <ul>{children}</ul>}
@@ -359,6 +359,7 @@ interface Props {
   trashable?: boolean;
   scrollable?: boolean;
   vertical?: boolean;
+  onDragEnd: (active: any) => void;
 }
 
 export const TRASH_ID = "void";
@@ -383,6 +384,7 @@ export default function MultipleContainers({
   trashable = false,
   vertical = false,
   scrollable,
+  onDragEnd,
 }: Props) {
   const [items, setItems] = useState<Items>(() => initialItems || {});
   const [containers, setContainers] = useState(
@@ -665,6 +667,10 @@ export default function MultipleContainers({
                 overIndex
               ),
             }));
+
+            if (onDragEnd) {
+              onDragEnd(active);
+            }
           }
         }
 
@@ -674,7 +680,7 @@ export default function MultipleContainers({
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-col md:flex-row gap-4">
         <SortableContext
           items={[...containers, PLACEHOLDER_ID]}
           strategy={
